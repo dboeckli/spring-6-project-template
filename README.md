@@ -9,8 +9,32 @@ This project serves as a template for Spring Boot 6 applications. It provides a 
 - JDK 21 or later
 - Maven
 - IntelliJ IDEA (recommended) or any preferred IDE
-- Docker account (for image publishing)
+- Docker Desktop and Docker account (for image publishing)
 
+## TODO:
+
+consider to setup Docker Desktop wsl image outside of Microsoft's cloud (currently in C:\Users\DominiqueBoeckli\AppData\Local\Docker\wsl)
+To set up Docker Desktop WSL image outside of Microsoft's cloud:
+1. Stop Docker Desktop and all running WSL instances.
+2. Open PowerShell as Administrator.
+3. Export existing Docker Desktop WSL distributions:
+   ```powershell
+   wsl --export docker-desktop [Path]\docker-desktop.tar
+   wsl --export docker-desktop-data [Path]\docker-desktop-data.tar
+   ```
+4. Unregister existing distributions:
+   ```powershell
+   wsl --unregister docker-desktop
+   wsl --unregister docker-desktop-data
+   ```
+5. Import distributions to new location:
+   ```powershell
+   wsl --import docker-desktop [NewPath]\docker-desktop [Path]\docker-desktop.tar
+   wsl --import docker-desktop-data [NewPath]\docker-desktop-data [Path]\docker-desktop-data.tar
+   ```
+6. Verify changes with wsl --list --verbose
+7. Restart Docker Desktop
+   
 ## Getting Started
 
 ### 1. Project Setup
