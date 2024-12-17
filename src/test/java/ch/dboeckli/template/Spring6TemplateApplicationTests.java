@@ -1,10 +1,10 @@
-package ch.dboeckli.springframeworkguru.spring6icecoldmicroservice;
+package ch.dboeckli.template;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Spring6IcecoldMicroServiceApplicationTests {
+class Spring6TemplateApplicationTests {
 
     @Test
     void contextLoads() {
