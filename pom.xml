@@ -9,12 +9,14 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>ch.dboeckli.springframeworkguru.spring-6-icecold-micro-service</groupId>
-    <artifactId>spring-6-icecold-micro-service</artifactId>
+    <!-- TODO: RENAME ME -->
+    <groupId>ch.dboeckli.template</groupId>
+    <!-- TODO: RENAME ME -->
+    <artifactId>spring-6-project-template</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <name>${project.artifactId}</name>
-    <description>spring-6-icecold-micro-service</description>
+    <description>${project.artifactId}</description>
 
     <scm>
         <connection>scm:git:https://github.com/${organization.name}/${project.artifactId}.git</connection>
@@ -112,10 +114,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-docker-compose</artifactId>
             <scope>runtime</scope>
@@ -147,11 +145,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

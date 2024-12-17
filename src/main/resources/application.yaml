@@ -1,6 +1,7 @@
 spring:
   application:
-    name: spring-6-icecold-micro-service
+    # // TODO: RENAME ME
+    name: spring-6-project-template
   docker:
     compose:
       enabled: false
