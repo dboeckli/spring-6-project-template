@@ -42,15 +42,9 @@ jobs:
         id: set_version
         env:
           EVENT_NAME: ${{ github.event_name }}
+          HEAD_REF: ${{ github.head_ref }}
+          BRANCH_NAME: ${{ github.ref_name }}
         run: |
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "### event_name 1: ${{ github.event_name }}"
-            echo "### ref_name 2: ${{ github.ref_name }}"
-            echo "### ref 3: ${{ github.ref }}"
-            echo "### head_ref 3: ${{ github.head_ref }}"
-            echo "### pull_request.number 3: ${{ github.event.pull_request.number }}"
-          fi
-          echo "### test 3: ${{ toJson(github) }}"
           "${GITHUB_WORKSPACE}/.github/workflows/scripts/set_maven_version.sh"
 
       - name: show variables

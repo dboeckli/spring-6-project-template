@@ -18,10 +18,8 @@ command -v mvn >/dev/null 2>&1 || error_exit "Maven is not installed or not in P
 
 echo 'Will change the version in pom.xml files...'
 
-# Get current branch name
-BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD) || error_exit "Failed to get the current branch name."
 if [ "$EVENT_NAME" == "pull_request" ]; then
-    BRANCH_NAME="PR_$BRANCH_NAME"
+    BRANCH_NAME="PR_$HEAD_REF"
 fi    
 echo "### Branch is $BRANCH_NAME"
 
