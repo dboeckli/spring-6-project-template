@@ -40,6 +40,8 @@ jobs:
 
       - name: Set Maven Versions
         id: set_version
+        env:
+          EVENT_NAME: ${{ github.event_name }}
         run: |
           "${GITHUB_WORKSPACE}/.github/workflows/scripts/set_maven_version.sh"
 
