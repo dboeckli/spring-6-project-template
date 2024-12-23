@@ -12,7 +12,7 @@
     <groupId>ch.dboeckli.template</groupId>
     <!-- TODO: RENAME ME -->
     <artifactId>spring-6-project-template</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
 
     <name>${project.artifactId}</name>
     <description>${project.artifactId}</description>
