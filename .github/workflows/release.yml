@@ -61,6 +61,7 @@ jobs:
         with:
           # requires admin github token which can do merge on master
           #token: ${{ secrets.RELEASE_TOKEN }} 
+          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
       - name: Set up java 21
