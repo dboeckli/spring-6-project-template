@@ -101,6 +101,9 @@ jobs:
           CI_USER_EMAIL: ${{ vars.CI_USER_EMAIL }}
           CI_USER: ${{ vars.CI_USER }}
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
         run: |
           mvn -B release:prepare release:perform -s $GITHUB_WORKSPACE/settings.xml
