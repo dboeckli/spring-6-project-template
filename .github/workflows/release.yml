@@ -88,11 +88,14 @@ jobs:
           git config --global user.name "${{ vars.CI_USER }}"        
 
       - name: Release
+        env:
+          CI_USER_EMAIL: ${{ vars.CI_USER_EMAIL }}
+          CI_USER: ${{ vars.CI_USER }}
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
           echo "########## remove me ${{ github.actor }}"
           echo "########## remove me ${CI_USER_EMAIL}"
           echo "########## remove me ${CI_USER}"
-          echo "########## remove me ${{ vars.CI_USER_EMAIL }}
-          echo "########## remove me ${{ vars.CI_USER }}
-          echo "### ALLMYVARS: $ALLMYVARS"
-          mvn -B release:prepare release:perform -Dusername=${{ github.actor }} -Dpassword=${RELEASE_TOKEN}
+          echo "########## remove me ${{ vars.CI_USER_EMAIL }}"
+          echo "########## remove me ${{ vars.CI_USER }}"
+          mvn -B release:prepare release:perform -Dusername="${{ github.actor }}" -Dpassword="${{ secrets.RELEASE_TOKEN }}"
