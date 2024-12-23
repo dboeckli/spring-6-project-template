@@ -45,6 +45,7 @@ jobs:
             echo "### test 1: ${{ github.event_name }}"
             echo "### test 2: ${{ github.ref_name }}"
             echo "### test 3: ${{ github.ref }}"
+            echo "### test 3: ${{ github.head_ref }}"
             echo "### test 3: ${{ toJson(github) }}"
             PR_NUMBER=${{ github.event.pull_request.number }}
             echo "This is Pull Request #$PR_NUMBER from $BRANCH_NAME into $BASE_BRANCH"
