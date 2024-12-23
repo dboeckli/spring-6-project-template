@@ -73,6 +73,14 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml.
           settings-path: ${{ github.workspace }} # location for the settings.xml file  
 
+      - name: View settings.xml
+        run: | 
+          echo "### test1 ###"
+          cat /home/runner/.m2/settings.xml
+          echo "### test2 ###"
+          cat ./settings.xml
+          echo "### test3 ###"
+      
       - name: Setup git user
         env:
           CI_USER_EMAIL: ${{ vars.CI_USER_EMAIL }}
