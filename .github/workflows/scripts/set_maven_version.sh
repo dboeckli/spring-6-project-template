@@ -16,13 +16,6 @@ function error_exit {
 command -v git >/dev/null 2>&1 || error_exit "Git is not installed or not in PATH."
 command -v mvn >/dev/null 2>&1 || error_exit "Maven is not installed or not in PATH."
 
-if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
-    BRANCH_NAME=$GITHUB_HEAD_REF
-    BASE_BRANCH=$GITHUB_BASE_REF
-    PR_NUMBER=${{ github.event.pull_request.number }}
-    echo "This is Pull Request #$PR_NUMBER from $BRANCH_NAME into $BASE_BRANCH"
-fi    
-
 echo 'Will change the version in pom.xml files...'
 
 # Get current branch name
