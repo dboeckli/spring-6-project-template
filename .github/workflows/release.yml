@@ -68,6 +68,8 @@ jobs:
           java-version: 21
           distribution: 'temurin'
           cache: 'maven'
+          server-id: github 
+          settings-path: ${{ github.workspace }} 
 
       - name: Setup git user
         env:
@@ -98,4 +100,4 @@ jobs:
           echo "########## remove me ${CI_USER}"
           echo "########## remove me ${{ vars.CI_USER_EMAIL }}"
           echo "########## remove me ${{ vars.CI_USER }}"
-          mvn -B release:prepare release:perform -Dusername="${{ github.actor }}" -Dpassword="${{ secrets.RELEASE_TOKEN }}"
+          mvn -B release:prepare release:perform -Dusername="${{ github.actor }}" -Dpassword="${{ secrets.RELEASE_TOKEN }}" -s $GITHUB_WORKSPACE/settings.xml
