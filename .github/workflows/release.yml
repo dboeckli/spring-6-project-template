@@ -20,11 +20,11 @@ jobs:
       - name: Check for main
         run: |
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
-          if [[ $BRANCH == "main" ]];
+          if [[ $BRANCH == "main" ||  $BRANCH == "master" ]];
           then
             echo "Releasing main branch, resuming"
           else
-            echo "Releasing only allowed for branch 'main'"
+            echo "Releasing only allowed for branch 'main' or 'master'"
             exit 1
           fi
   
@@ -78,26 +78,9 @@ jobs:
 
       - name: Setup git user
         run: |
-          git config --global user.email "${{ vars.SWP_CI_USER_EMAIL }}" 
-          git config --global user.name "${{ vars.SWP_CI_USER }}"        
-
-      - name: Setup maven settings.xml
-        uses: s4u/maven-settings-action@v3.0.0
-        with:
-          servers: >
-            [
-              {
-                "id": "central",
-                "username": "${{ vars.ARTIFACTORY_CI_SWP_USERNAME }}",
-                "password": "${{ secrets.ARTIFACTORY_CI_SWP_TOKEN }}"
-              },
-              {
-                "id": "snapshots",
-                "username": "${{ vars.ARTIFACTORY_CI_SWP_USERNAME }}",
-                "password": "${{ secrets.ARTIFACTORY_CI_SWP_TOKEN }}"
-              }
-            ]
+          git config --global user.email "${{ vars.CI_USER_EMAIL }}" 
+          git config --global user.name "${{ vars.CI_USER }}"        
 
       - name: Release
         run: |
-          mvn -B release:prepare release:perform -Dusername=${{ vars.SWP_CI_USER_EMAIL }} -Dpassword=${{ secrets.SWP_CI_TOKEN }}
+          mvn -B release:prepare release:perform -Dusername=${{ vars.CI_USER_EMAIL }} -Dpassword=${{ secrets.RELEASE_TOKEN }}

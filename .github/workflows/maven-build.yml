@@ -119,7 +119,7 @@ jobs:
             fi
           done
           
-          if [[ "${BRANCH_NAME}" == "master" ]]; then
+          if [[ "${BRANCH_NAME}" == "master" ||  ${BRANCH_NAME}" == "main" ]]; then
             echo "::notice:: ### Build of Master. Version: $BRANCH_MVN_VERSION"
           else
             echo "::notice:: ### Build of Feature Branch ${BRANCH_NAME}. Version: $BRANCH_MVN_VERSION"
