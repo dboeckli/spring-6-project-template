@@ -20,6 +20,9 @@ echo 'Will change the version in pom.xml files...'
 
 # Get current branch name
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD) || error_exit "Failed to get the current branch name."
+if [ "${{ github.event_name }}" == "pull_request" ]; then
+    BRANCH_NAME="PR_$BRANCH_NAME"
+fi    
 echo "### Branch is $BRANCH_NAME"
 
 # Replace `/` and `-` with `_` and remove any other unwanted characters
