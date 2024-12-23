@@ -59,11 +59,13 @@ jobs:
           echo ":maple_leaf: Artifact ID: ${{ steps.set_version.outputs.ARTIFACT_ID }}" >> $GITHUB_STEP_SUMMARY
           echo ":maple_leaf: Original Maven version: ${{ steps.set_version.outputs.MVN_VERSION }}" >> $GITHUB_STEP_SUMMARY
           echo ":cactus: Calculated Maven Version: ${{ steps.set_version.outputs.BRANCH_MVN_VERSION }}" >> $GITHUB_STEP_SUMMARY
+          
 
   build:
     runs-on: ubuntu-latest
 
     needs: [ setup ]
+    if: endsWith(needs.setup.outputs.MVN_VERSION, '-SNAPSHOT')
 
     permissions:
       contents: read
