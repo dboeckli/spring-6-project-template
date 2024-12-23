@@ -60,8 +60,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           # requires admin github token which can do merge on master
-          #token: ${{ secrets.RELEASE_TOKEN }} 
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN }} 
           fetch-depth: 0
 
       - name: Set up java 21
@@ -102,5 +101,6 @@ jobs:
           CI_USER_EMAIL: ${{ vars.CI_USER_EMAIL }}
           CI_USER: ${{ vars.CI_USER }}
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
           mvn -B release:prepare release:perform -s $GITHUB_WORKSPACE/settings.xml
