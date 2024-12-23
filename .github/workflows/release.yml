@@ -20,7 +20,7 @@ jobs:
       - name: Check for main
         run: |
           BRANCH=$(git rev-parse --abbrev-ref HEAD)
-          if [[ $BRANCH == "main" ||  $BRANCH == "master" ]];
+          if [[ "$BRANCH" == "main" ||  "$BRANCH" == "master" ]];
           then
             echo "Releasing main branch, resuming"
           else
