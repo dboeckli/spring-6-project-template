@@ -88,4 +88,7 @@ jobs:
 
       - name: Release
         run: |
-          mvn -B release:prepare release:perform -Dusername=${CI_USER_EMAIL} -Dpassword=${RELEASE_TOKEN}
+          echo "########## remove me ${{ github.actor }}"
+          echo "########## remove me ${CI_USER_EMAIL}"
+          echo "########## remove me ${CI_USER}"
+          mvn -B release:prepare release:perform -Dusername=${{ github.actor }} -Dpassword=${RELEASE_TOKEN}
