@@ -74,6 +74,7 @@ jobs:
           CI_USER_EMAIL: ${{ vars.CI_USER_EMAIL }}
           CI_USER: ${{ vars.CI_USER }}
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          ALLMYVARS: ${{ toJSON(vars) }}
         run: |
           # Check if required parameters are set
           required_params=("CI_USER_EMAIL" "RELEASE_TOKEN" "CI_USER")
@@ -91,4 +92,7 @@ jobs:
           echo "########## remove me ${{ github.actor }}"
           echo "########## remove me ${CI_USER_EMAIL}"
           echo "########## remove me ${CI_USER}"
+          echo "########## remove me ${{ vars.CI_USER_EMAIL }}
+          echo "########## remove me ${{ vars.CI_USER }}
+          echo "### ALLMYVARS: $ALLMYVARS"
           mvn -B release:prepare release:perform -Dusername=${{ github.actor }} -Dpassword=${RELEASE_TOKEN}
