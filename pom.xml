@@ -12,7 +12,7 @@
     <groupId>ch.dboeckli.template</groupId>
     <!-- TODO: RENAME ME -->
     <artifactId>spring-6-project-template</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
 
     <name>${project.artifactId}</name>
     <description>${project.artifactId}</description>
@@ -21,7 +21,7 @@
         <connection>scm:git:https://github.com/${organization.name}/${project.artifactId}.git</connection>
         <developerConnection>scm:git:https://github.com/${organization.name}/${project.artifactId}.git</developerConnection>
         <url>https://github.com/${organization.name}/${project.artifactId}.git</url>
-        <tag>HEAD</tag>
+        <tag>spring-6-project-template-0.0.2</tag>
     </scm>
 
     <properties>
