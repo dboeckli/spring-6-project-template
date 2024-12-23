@@ -59,7 +59,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.SWP_CI_TOKEN }} # TODO: create github token which can do merge on master
+          token: ${{ secrets.RELEASE_TOKEN }} # TODO: create github token which can do merge on master
           fetch-depth: 0
 
       - name: Set up java 21
