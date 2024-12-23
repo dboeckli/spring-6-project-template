@@ -59,7 +59,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v4
         with:
-          # requires admin github token which can do merge on master
+          # requires admin gitHub token which can do merge on master
           token: ${{ secrets.RELEASE_TOKEN }} 
           fetch-depth: 0
 
@@ -74,19 +74,16 @@ jobs:
 
       - name: View settings.xml
         run: | 
-          echo "### test2 ###"
+          echo "### show settings.xml ###"
           cat ./settings.xml
-          echo "### test3 ###"
       
       - name: Setup git user
         env:
           CI_USER_EMAIL: ${{ vars.CI_USER_EMAIL }}
           CI_USER: ${{ vars.CI_USER }}
-          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-          ALLMYVARS: ${{ toJSON(vars) }}
         run: |
           # Check if required parameters are set
-          required_params=("CI_USER_EMAIL" "RELEASE_TOKEN" "CI_USER")
+          required_params=("CI_USER_EMAIL" "CI_USER")
           for param in "${required_params[@]}"; do
             if [ -z "${!param}" ]; then
               echo "::error::Required parameter $param is not set"
@@ -98,12 +95,18 @@ jobs:
 
       - name: Release
         env:
-          CI_USER_EMAIL: ${{ vars.CI_USER_EMAIL }}
-          CI_USER: ${{ vars.CI_USER }}
-          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
+          # requires admin gitHub token which can do merge on master
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
         run: |
+          # Check if required parameters are set
+          required_params=("GITHUB_ACTOR" "GITHUB_TOKEN" "DOCKER_USER" "DOCKER_TOKEN")
+          for param in "${required_params[@]}"; do
+          if [ -z "${!param}" ]; then
+            echo "::error::Required parameter $param is not set"
+            exit 1
+          fi
+          done
           mvn -B release:prepare release:perform -s $GITHUB_WORKSPACE/settings.xml
