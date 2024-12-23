@@ -69,18 +69,26 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Cache maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
-
       - name: Setup git user
+        env:
+          CI_USER_EMAIL: ${{ vars.CI_USER_EMAIL }}
+          CI_USER: ${{ vars.CI_USER }}
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         run: |
+          # Check if required parameters are set
+          required_params=("CI_USER_EMAIL" "RELEASE_TOKEN" "CI_USER")
+          for param in "${required_params[@]}"; do
+            if [ -z "${!param}" ]; then
+              echo "::error::Required parameter $param is not set"
+              exit 1
+            fi
+          done
           git config --global user.email "${{ vars.CI_USER_EMAIL }}" 
           git config --global user.name "${{ vars.CI_USER }}"        
 
       - name: Release
         run: |
-          mvn -B release:prepare release:perform -Dusername=${{ vars.CI_USER_EMAIL }} -Dpassword=${{ secrets.RELEASE_TOKEN }}
+          echo "########## remove me ${{ github.actor }}"
+          echo "########## remove me ${CI_USER_EMAIL}"
+          echo "########## remove me ${CI_USER}"
+          mvn -B release:prepare release:perform -Dusername=${{ github.actor }} -Dpassword=${RELEASE_TOKEN}
