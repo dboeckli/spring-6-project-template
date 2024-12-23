@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 // TODO: RENAME ME
-class Spring6TemplateApplicationTests {
+class Spring6TemplateApplicationTest {
 
     @Test
     void contextLoads() {
