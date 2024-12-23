@@ -100,12 +100,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>ch.dboeckli.guru.springframework</groupId>
-            <artifactId>spring-6-rest-mvc-api </artifactId>
-            <version>${spring-6-rest-mvc-api.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
