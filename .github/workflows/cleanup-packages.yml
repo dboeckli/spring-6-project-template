@@ -21,6 +21,7 @@ jobs:
       - uses: actions/delete-package-versions@v5
         id: delete-all-feature-and-pr-package
         with:
+          # TODO: correct package name
           package-name: 'ch.dboeckli.template.spring-6-project-template'
           package-type: 'maven'
           min-versions-to-keep: 1
@@ -31,6 +32,7 @@ jobs:
       - uses: actions/delete-package-versions@v5
         id: delete-all-packages
         with:
+          # TODO: correct package name
           package-name: 'ch.dboeckli.template.spring-6-project-template'
           package-type: 'maven'
           min-versions-to-keep: 3
