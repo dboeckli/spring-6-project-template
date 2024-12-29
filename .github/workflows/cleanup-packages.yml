@@ -30,11 +30,6 @@ jobs:
           # Effectively, it targets only feature and PR packages for deletion
           ignore-versions: '^((?!(_feature_|_PR_feature_)).)*$'
 
-      - name: Display deleted feature and PR packages
-        run: |
-          echo "#1# Deleted versions: ${{ steps.delete-all-feature-and-pr-package.outputs.deleted-versions }}"
-          echo "#1# Number of deleted versions: ${{ steps.delete-all-feature-and-pr-package.outputs.total-deleted-versions }}"
-      
       - uses: actions/delete-package-versions@v5
         id: delete-all-packages
         with:
@@ -46,8 +41,3 @@ jobs:
           # This regex ignores versions that match the semantic versioning pattern (e.g., 1.0.0)
           # It will keep these versions and delete others
           ignore-versions: '^\\d+\\.\\d+\\.\\d+$'
-          
-      - name: Display deleted packages
-        run: |
-          echo "#2# Deleted versions: ${{ steps.delete-all-packages.outputs.deleted-versions }}"
-          echo "#2# Number of deleted versions: ${{ steps.delete-all-packages.outputs.total-deleted-versions }}"    
