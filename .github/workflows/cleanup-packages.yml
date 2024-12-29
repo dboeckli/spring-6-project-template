@@ -18,6 +18,12 @@ jobs:
       packages: write
 
     steps:
+      - name: List packages before deletion
+        # TODO: correct package name
+        run: |
+          echo "Packages before deletion:"
+          gh package list -R ${{ github.repository }} --limit 1000 | grep 'ch.dboeckli.template.spring-6-project-template'
+      
       - uses: actions/delete-package-versions@v5
         id: delete-all-feature-and-pr-package
         with:
@@ -30,6 +36,12 @@ jobs:
           # Effectively, it targets only feature and PR packages for deletion
           ignore-versions: '^((?!(_feature_|_PR_feature_)).)*$'
 
+      - name: List packages after deletion
+        # TODO: correct package name
+        run: |
+          echo "Packages after deletion:"
+          gh package list -R ${{ github.repository }} --limit 1000 | grep 'ch.dboeckli.template.spring-6-project-template'      
+    
       - uses: actions/delete-package-versions@v5
         id: delete-all-packages
         with:
@@ -41,3 +53,9 @@ jobs:
           # This regex ignores versions that match the semantic versioning pattern (e.g., 1.0.0)
           # It will keep these versions and delete others
           ignore-versions: '^\\d+\\.\\d+\\.\\d+$'
+          
+      - name: List packages after deletion
+        # TODO: correct package name
+        run: |
+          echo "Packages after deletion:"
+          gh package list -R ${{ github.repository }} --limit 1000 | grep 'ch.dboeckli.template.spring-6-project-template'          
