@@ -35,7 +35,7 @@ This project serves as a template for Spring Boot 6 applications. It provides a 
 2. Rename packages and classes as needed.
 
 ### 4. GitHub Configuration
-1. Add the following secrets in your GitHub project settings:
+1. Add the following secrets in your GitHub project Action settings:
     - `DOCKER_USER`
     - `DOCKER_ACCESS_TOKEN`
     - `RELEASE_TOKEN`: A GitHub Personal Access Token with permissions to push to the master branch
@@ -47,6 +47,12 @@ This project serves as a template for Spring Boot 6 applications. It provides a 
         5. Select at least these scopes: `repo`, `write:packages`
         6. Generate the token and copy it immediately
     - Add this token as a secret named `RELEASE_TOKEN` in your repository settings
+2. Add the following vars in your GitHub project Action settings:
+    - CI_USER and set value to dboeckli@gmail.com
+    - CI_USER_EMAIL set value to dboeckli@gmail.com
+3. Add the following secrets in your GitHub project Dependent Bot settings:
+   - `DOCKER_USER`
+   - `DOCKER_ACCESS_TOKEN`
 
 ### 5. Build and Deployment
 1. Trigger a rebuild in GitHub Actions.
