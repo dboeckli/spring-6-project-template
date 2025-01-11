@@ -168,8 +168,6 @@ jobs:
             fi
           done
           
-          echo "### DEBUG: ${ORGANIZATION}"
-          
           if [[ "${BRANCH_NAME}" == "master" ||  "${BRANCH_NAME}" == "main" ]]; then
             # TODO: rename sonar.projectKey
             mvn -B sonar:sonar \
@@ -182,7 +180,7 @@ jobs:
                   -Dsonar.branch.name=master
           else
             mvn -B versions:set -e -DnewVersion="$BRANCH_MVN_VERSION"
-            # TODO: rename sonar.projectKey
+            # TODO: rename sonar.projectKey. use organization and artifact id or project name
             mvn -B sonar:sonar \
                   -s $GITHUB_WORKSPACE/settings.xml \
                   -Dsonar.token=${SONAR_TOKEN} \
