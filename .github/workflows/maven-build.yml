@@ -154,6 +154,8 @@ jobs:
           DOCKER_USER: ${{ secrets.DOCKER_USER }}
           DOCKER_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
           ORGANIZATION: ${{needs.setup.outputs.ORGANIZATION}}
+          ARTIFACT_ID: ${{needs.setup.outputs.ARTIFACT_ID}}
+          
         run: |
           set -o pipefail    # don't hide errors within pipes
           set -o nounset     # abort on unbound variable
@@ -169,25 +171,23 @@ jobs:
           done
           
           if [[ "${BRANCH_NAME}" == "master" ||  "${BRANCH_NAME}" == "main" ]]; then
-            # TODO: rename sonar.projectKey
             mvn -B sonar:sonar \
                   -s $GITHUB_WORKSPACE/settings.xml \
                   -Dsonar.token=${SONAR_TOKEN} \
                   -Dsonar.host.url=https://sonarcloud.io \
                   -Dsonar.sourceEncoding=UTF-8 \
                   -Dsonar.organization=${ORGANIZATION} \
-                  -Dsonar.projectKey=dboeckli_spring-6-project-template \
+                  -Dsonar.projectKey="${ORGANIZATION}_${ARTIFACT_ID}" \
                   -Dsonar.branch.name=master
           else
             mvn -B versions:set -e -DnewVersion="$BRANCH_MVN_VERSION"
-            # TODO: rename sonar.projectKey. use organization and artifact id or project name
             mvn -B sonar:sonar \
                   -s $GITHUB_WORKSPACE/settings.xml \
                   -Dsonar.token=${SONAR_TOKEN} \
                   -Dsonar.host.url=https://sonarcloud.io \
                   -Dsonar.sourceEncoding=UTF-8 \
                   -Dsonar.organization=${ORGANIZATION} \
-                  -Dsonar.projectKey=dboeckli_spring-6-project-template \
+                  -Dsonar.projectKey="${ORGANIZATION}_${ARTIFACT_ID}" \
                   -Dsonar.branch.name=${BRANCH_NAME} \
                   -Dsonar.branch.target=master
           fi      
