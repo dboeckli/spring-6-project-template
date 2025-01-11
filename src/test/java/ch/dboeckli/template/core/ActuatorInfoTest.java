@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Slf4j
-public class ActuatorInfoTest {
+class ActuatorInfoTest {
 
     @Autowired
     private MockMvc mockMvc;
