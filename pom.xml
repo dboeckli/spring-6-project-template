@@ -49,7 +49,6 @@
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
         <sonar.language>java</sonar.language>
         <sonar.scm.provider>git</sonar.scm.provider>
-        <sonar.scm.forceReloadAll>true</sonar.scm.forceReloadAll>
         <jacoco.version>0.8.12</jacoco.version>
 
         <git-commit-id-maven-plugin.version>9.0.1</git-commit-id-maven-plugin.version>
