@@ -209,7 +209,9 @@ jobs:
           key: ${{ runner.os }}-cache-${{ github.sha }}
       - name: Read cached data
         run: |
-          echo "showing restore cache with cat"
-          cat ./target   
+          echo "showing restore cache with ls -la"
+          ls -la   
+          echo "showing restore cache with pwd"
+          pwd
           echo "showing restore cache with tree"
           tree
