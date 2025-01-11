@@ -38,6 +38,7 @@ This project serves as a template for Spring Boot 6 applications. It provides a 
 1. Add the following secrets in your GitHub project Action settings:
     - `DOCKER_USER`
     - `DOCKER_ACCESS_TOKEN`
+    - `SONAR_TOKEN`: a Sonar Token generated in https://sonarcloud.io. Sonar Analysis Method: Automatic Analysis disabled. 
     - `RELEASE_TOKEN`: A GitHub Personal Access Token with permissions to push to the master branch
     - To create this token:
         1. Go to GitHub Settings > Developer settings > Personal access tokens
