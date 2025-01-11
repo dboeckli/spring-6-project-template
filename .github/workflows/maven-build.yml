@@ -193,6 +193,15 @@ jobs:
   analyze:
     runs-on: ubuntu-latest
     needs: build
+    
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      checks: write
+      pull-requests: write
+      actions: read
+    
     steps:
       - uses: actions/checkout@v4
 
