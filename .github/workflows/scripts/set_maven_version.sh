@@ -38,7 +38,7 @@ ORGANIZATION=$(mvn help:evaluate -Dexpression=project.organization.name -q -e -D
 echo "MVN_VERSION=$MVN_VERSION" >>"$GITHUB_OUTPUT"
 echo "ARTIFACT_ID=$ARTIFACT_ID" >>"$GITHUB_OUTPUT"
 echo "GROUP_ID=$GROUP_ID" >>"$GITHUB_OUTPUT"
-echo "ORGANIZATION=ORGANIZATION" >>"$GITHUB_OUTPUT"
+echo "ORGANIZATION=$ORGANIZATION" >>"$GITHUB_OUTPUT"
 echo "### Current version is: $MVN_VERSION"
 
 # Extract version parts
