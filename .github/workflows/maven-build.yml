@@ -166,23 +166,25 @@ jobs:
           done
           
           if [[ "${BRANCH_NAME}" == "master" ||  "${BRANCH_NAME}" == "main" ]]; then
+            # TODO: rename sonar.projectKey
             mvn -B sonar:sonar \
                   -s $GITHUB_WORKSPACE/settings.xml \
                   -Dsonar.token=${SONAR_TOKEN} \
                   -Dsonar.host.url=https://sonarcloud.io \
                   -Dsonar.sourceEncoding=UTF-8 \
                   -Dsonar.organization=dboeckli \
-                  -Dsonar.projectKey=dboeckli_dispatch \
+                  -Dsonar.projectKey=dboeckli_spring-6-project-template \
                   -Dsonar.branch.name=master
           else
             mvn -B versions:set -e -DnewVersion="$BRANCH_MVN_VERSION"
+            # TODO: rename sonar.projectKey
             mvn -B sonar:sonar \
                   -s $GITHUB_WORKSPACE/settings.xml \
                   -Dsonar.token=${SONAR_TOKEN} \
                   -Dsonar.host.url=https://sonarcloud.io \
                   -Dsonar.sourceEncoding=UTF-8 \
                   -Dsonar.organization=dboeckli \
-                  -Dsonar.projectKey=dboeckli_dispatch \
+                  -Dsonar.projectKey=dboeckli_spring-6-project-template \
                   -Dsonar.branch.name=${BRANCH_NAME} \
                   -Dsonar.branch.target=master
           fi      
