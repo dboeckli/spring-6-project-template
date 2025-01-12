@@ -31,6 +31,7 @@ class ActuatorInfoTest {
             .andExpect(jsonPath("$.build.javaVersion").value("21"))
             .andExpect(jsonPath("$.build.commit-id").isString())
             .andExpect(jsonPath("$.build.javaVendor").isString())
+            // TODO: ADAPT ACRTIFACT ID AND GROUP ID
             .andExpect(jsonPath("$.build.artifact").value("spring-6-project-template"))
             .andExpect(jsonPath("$.build.group").value("ch.dboeckli.template"))
             .andReturn();
