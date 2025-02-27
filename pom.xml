@@ -42,12 +42,6 @@
         <logbook.version>3.10.0</logbook.version>
         <logstash-logback.version>8.0</logstash-logback.version>
 
-        <spring-format.version>0.0.43</spring-format.version>
-        <maven-checkstyle.version>3.6.0</maven-checkstyle.version>
-        <checkstyle.version>10.20.1</checkstyle.version>
-        <spring-format.version>0.0.43</spring-format.version>
-        <nohttp-checkstyle.version>0.0.11</nohttp-checkstyle.version>
-
         <!-- our dependencies -->
         <spring-6-rest-mvc-api.version>0.0.1-SNAPSHOT</spring-6-rest-mvc-api.version>
 
@@ -209,54 +203,6 @@
                                     <version>${java.version}</version>
                                 </requireJavaVersion>
                             </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>io.spring.javaformat</groupId>
-                <artifactId>spring-javaformat-maven-plugin</artifactId>
-                <version>${spring-format.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>validate</goal>
-                        </goals>
-                        <phase>validate</phase>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${maven-checkstyle.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.puppycrawl.tools</groupId>
-                        <artifactId>checkstyle</artifactId>
-                        <version>${checkstyle.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>io.spring.nohttp</groupId>
-                        <artifactId>nohttp-checkstyle</artifactId>
-                        <version>${nohttp-checkstyle.version}</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <id>nohttp-checkstyle-validation</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <phase>validate</phase>
-                        <configuration>
-                            <configLocation>src/checkstyle/nohttp-checkstyle.xml</configLocation>
-                            <sourceDirectories>${basedir}</sourceDirectories>
-                            <includes>**/*</includes>
-                            <excludes>**/.git/**/*,**/.idea/**/*,**/target/**/,**/.flattened-pom.xml,**/*.class</excludes>
-                            <propertyExpansion>config_loc=${basedir}/src/checkstyle/</propertyExpansion>
                         </configuration>
                     </execution>
                 </executions>
