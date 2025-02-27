@@ -18,6 +18,14 @@ Accept: application/json
 GET http://localhost:8080/actuator/health/liveness
 Accept: application/json
 
+### actuator sbom
+GET http://localhost:8080/actuator/sbom
+Accept: application/json
+
+### actuator sbom application
+GET http://localhost:8080/actuator/sbom/application
+Accept: application/octet-stream
+
 ### actuator metrics
 GET localhost:8080/actuator/metrics
 Accept: application/json

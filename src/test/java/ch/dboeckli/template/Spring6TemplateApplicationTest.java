@@ -1,5 +1,5 @@
 package ch.dboeckli.template;
-// TODO: RENAME PACKAGE
+// TODOS: RENAME PACKAGE
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(useMainMethod = SpringBootTest.UseMainMethod.ALWAYS)
 @Slf4j
-// TODO: RENAME ME
+// TODOS: RENAME ME
 class Spring6TemplateApplicationTest {
 
     @Autowired
