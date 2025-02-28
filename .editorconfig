@@ -405,6 +405,8 @@ ij_properties_key_value_delimiter = equals
 ij_properties_spaces_around_key_value_delimiter = false
 
 [{*.yaml,*.yml}]
+indent_size = 2
+tab_width = 2
 ij_yaml_align_values_properties = do_not_align
 ij_yaml_autoinsert_sequence_marker = true
 ij_yaml_block_mapping_on_new_line = false

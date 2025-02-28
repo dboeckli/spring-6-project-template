@@ -43,3 +43,6 @@ logbook:
   predicate:
     exclude:
       - path: /actuator/health/**
+
+server:
+  port: 8080
