@@ -34,8 +34,6 @@ spec:
           env:
             #- name: SPRING_PROFILES_ACTIVE
             #  value: postgres
-            - name: SERVICE_BINDING_ROOT
-              value: /bindings
             - name: SPRING_APPLICATION_JSON
               value: |
                 {
@@ -52,14 +50,3 @@ spec:
             httpGet:
               path: /readyz
               port: http
-          volumeMounts:
-            - mountPath: /bindings/secret
-              name: binding
-              readOnly: true
-
-      volumes:
-        - name: binding
-          projected:
-            sources:
-              - secret:
-                  name: demo
