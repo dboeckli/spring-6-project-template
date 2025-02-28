@@ -1,32 +1,32 @@
 name: Deploy and Test Cluster
 
 on:
-    workflow_dispatch:
+  workflow_dispatch:
 
-    push:
-        branches: [ main ]
-        paths:
-            - 'k8s/**'
-    pull_request:
-        branches: [ main ]
-        paths:
-            - 'k8s/**'
+  push:
+    branches: [ main ]
+    paths:
+      - 'k8s/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'k8s/**'
 
 jobs:
-    deploy-and-test-cluster:
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Check out the repository
-                uses: actions/checkout@v4
+  deploy-and-test-cluster:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
 
-            -   name: Create k8s Kind Cluster
-                uses: helm/kind-action@v1
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1
 
-            -   name: Deploy application
-                run: |
-                    kubectl apply -f k8s/
+      - name: Deploy application
+        run: |
+          kubectl apply -f k8s/
 
-            -   name: Wait for Pods to be ready
-                run: |
-                    kubectl wait --for=condition=ready pod -l app=spring-6-project-template --timeout=180s
+      - name: Wait for Pods to be ready
+        run: |
+          kubectl wait --for=condition=ready pod -l app=spring-6-project-template --timeout=180s
 
