@@ -6,6 +6,7 @@ on:
     workflows: [ Maven Build ]
     types:
       - completed
+    branches: ['**']
 
   push:
     branches: [ main ]
