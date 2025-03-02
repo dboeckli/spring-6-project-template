@@ -247,7 +247,7 @@ jobs:
                   -Dsonar.branch.target=master
           fi 
 
-  Deploy:
+  Trigger-Deploy:
     runs-on: ubuntu-latest
     needs: [ setup, build ]
 
