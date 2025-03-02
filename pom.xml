@@ -207,6 +207,8 @@
                         <!-- You can exclude further files from processing: -->
                         <exclude>**/toolchains.xml</exclude>
                         <exclude>**/settings.xml</exclude>
+                        <exclude>.run/**</exclude>
+                        <exclude>**/banner.txt</exclude>
                     </excludes>
                 </configuration>
             </plugin>
