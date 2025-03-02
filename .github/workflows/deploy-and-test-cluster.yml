@@ -7,6 +7,11 @@ on:
         type: string
         description: 'Version to deploy'
         required: true
+      deployed-by-build:
+        type: string
+        description: 'Deployed by workflow'
+        required: true
+        default: 'Manual'
 
 jobs:
   deploy-and-test-cluster:
@@ -15,6 +20,7 @@ jobs:
       - name: Show Version
         run: |
           echo "Deploying Version: ${{ inputs.version }}"
+          echo "Deployed by: ${{ inputs.deployed-by-build }}"
 
       - name: Check out the repository
         uses: actions/checkout@v4
@@ -31,7 +37,7 @@ jobs:
       - name: Wait for Pods to be ready
         run: |
           kubectl wait --for=condition=ready pod -l app=spring-6-project-template --timeout=180s
-          echo "::notice:: ### Deployed Version: ${{ inputs.version }}"
+          echo "::notice:: ### Deployed Version: ${{ inputs.version }}. Deployed my build: ${{ inputs.deployed-by-build }}"
 
       - name: Display Deployment Information
         run: |
