@@ -44,7 +44,7 @@ jobs:
           DOCKER_USER: ${{ vars.DOCKER_USER }}
           CI_USER: ${{ vars.CI_USER }}
           CI_USER_EMAIL: ${{ vars.CI_USER_EMAIL }}
-          DOCKER_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+          DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           TRIGGER_WORKFLOW_TOKEN: ${{ secrets.TRIGGER_WORKFLOW_TOKEN }}
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
