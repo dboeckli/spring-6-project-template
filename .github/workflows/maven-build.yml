@@ -249,7 +249,7 @@ jobs:
 
   Deploy:
     runs-on: ubuntu-latest
-    needs: [ setup ]
+    needs: [ setup, build ]
 
     permissions:
       contents: read
@@ -258,9 +258,10 @@ jobs:
       checks: write
       pull-requests: write
       actions: read
+      workflows: write
 
     steps:
-      - name: Trigger another workflow
+      - name: Trigger Deployment
         if: success()  # This ensures the step only runs if all previous steps were successful
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
