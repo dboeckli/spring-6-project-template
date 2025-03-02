@@ -252,12 +252,7 @@ jobs:
     needs: [ setup, build ]
 
     permissions:
-      contents: read
-      packages: write
-      id-token: write
-      checks: write
-      pull-requests: write
-      actions: read
+      permissions: write-all
 
     steps:
       - name: Trigger Deployment
@@ -265,7 +260,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.TRIGGER_WORKFLOW_TOKEN }}
         run: |
-          gh workflow run deploy-and-test-cluster.yml -R ${{ github.repository }} -r ${{ github.ref }} \
-            -f param1=value1 \
-            -f param2=value2        
+          gh workflow run deploy-and-test-cluster.yml -R ${{ github.repository }} -r ${{ github.ref }}
         
