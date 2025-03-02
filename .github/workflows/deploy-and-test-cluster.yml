@@ -21,6 +21,10 @@ jobs:
   deploy-and-test-cluster:
     runs-on: ubuntu-latest
     steps:
+      - name: Show Version
+        run: |
+          echo "Deploying Version: ${{ inputs.version }}"
+
       - name: Check out the repository
         uses: actions/checkout@v4
 
