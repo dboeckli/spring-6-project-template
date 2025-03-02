@@ -258,7 +258,6 @@ jobs:
       checks: write
       pull-requests: write
       actions: read
-      workflows: write
 
     steps:
       - name: Trigger Deployment
