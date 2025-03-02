@@ -263,7 +263,7 @@ jobs:
       - name: Trigger Deployment
         if: success()  # This ensures the step only runs if all previous steps were successful
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.TRIGGER_WORKFLOW_TOKEN }}
         run: |
           gh workflow run deploy-and-test-cluster.yml -R ${{ github.repository }} -r ${{ github.ref }} \
             -f param1=value1 \
