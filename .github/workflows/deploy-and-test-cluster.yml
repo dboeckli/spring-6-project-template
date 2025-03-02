@@ -42,10 +42,9 @@ jobs:
       - name: Wait for Pods to be ready
         run: |
           kubectl wait --for=condition=ready pod -l app=spring-6-project-template --timeout=180s
-          echo "::notice:: ### Deployed Version: ${{ inputs.version }}. Deployed my build: ${{ inputs.deployed-by-build }}"
           BUILD_LINK="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ inputs.deployed-by-build }}"
-          echo "::notice:: ### Build Link: $BUILD_LINK"
-          echo "::notice:: ### Workflow Name: ${{ inputs.version }}
+          echo "::notice:: ### Deployed Version: ${{ inputs.version }}"
+          echo "::notice:: ### Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}: $BUILD_LINK"
 
       - name: Display Deployment Information
         run: |
