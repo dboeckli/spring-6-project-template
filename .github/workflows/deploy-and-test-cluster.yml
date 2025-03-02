@@ -3,8 +3,10 @@ name: Deploy and Test Cluster
 on:
   workflow_dispatch:
     inputs:
-      parameter:
-        description: My Parameter
+      version:
+        type: string
+        description: 'Version to deploy'
+        required: true
 
   push:
     branches: [ main ]
