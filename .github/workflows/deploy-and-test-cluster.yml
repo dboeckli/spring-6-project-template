@@ -2,11 +2,9 @@ name: Deploy and Test Cluster
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: [ Maven Build ]
-    types:
-      - completed
-    branches: ['**']
+    inputs:
+      parameter:
+        description: My Parameter
 
   push:
     branches: [ main ]
