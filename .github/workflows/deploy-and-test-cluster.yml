@@ -8,15 +8,6 @@ on:
         description: 'Version to deploy'
         required: true
 
-  push:
-    branches: [ main ]
-    paths:
-      - 'k8s/**'
-  pull_request:
-    branches: [ main ]
-    paths:
-      - 'k8s/**'
-
 jobs:
   deploy-and-test-cluster:
     runs-on: ubuntu-latest
