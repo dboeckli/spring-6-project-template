@@ -263,8 +263,8 @@ jobs:
           BRANCH_MVN_VERSION: ${{needs.setup.outputs.BRANCH_MVN_VERSION}}
         run: |
           gh workflow run deploy-and-test-cluster.yml -R ${{ github.repository }} -r ${{ github.ref }} \
-          -f "version=$BRANCH_MVN_VERSION"
-          -f "deployed-by-build=${{ github.run_id }}"
+          -f "version=$BRANCH_MVN_VERSION" \
+          -f "deployed-by-build=${{ github.run_id }}" \
           -f "deployed-by-workflow=${{ github.workflow }}"
 
         
