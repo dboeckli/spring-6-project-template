@@ -44,16 +44,16 @@ jobs:
           required_vars=("DOCKER_USER" "CI_USER" "CI_USER_EMAIL")
           required_secrets=("DOCKER_ACCESS_TOKEN" "SONAR_TOKEN" "TRIGGER_WORKFLOW_TOKEN" "RELEASE_TOKEN")
           
-          for var in "${required_vars[@]}"; do
-            if [ -z "${{ vars[var] }}" ]; then
-              echo "::error::Required variable $var is not set"
+          for param in "${required_vars[@]}"; do
+            if [ -z "${!param}" ]; then
+              echo "::error::Required parameter $param is not set"
               exit 1
             fi
           done
           
-          for secret in "${required_secrets[@]}"; do
-            if [ -z "${{ secrets[secret] }}" ]; then
-              echo "::error::Required secret $secret is not set"
+          for param in "${required_secrets[@]}"; do
+            if [ -z "${!param}" ]; then
+              echo "::error::Required parameter $param is not set"
               exit 1
             fi
           done
@@ -83,13 +83,11 @@ jobs:
           
           # Verify required outputs from set_version step
           required_outputs=("BRANCH_MVN_VERSION" "BRANCH_NAME" "MVN_VERSION" "ARTIFACT_ID" "GROUP_ID" "ORGANIZATION")
-          for output in "${required_outputs[@]}"; do
-            value="${{ steps.set_version.outputs[output] }}"
-            if [ -z "$value" ]; then
-              echo "::error::Required output $output is not set"
+          
+          for param in "${required_outputs[@]}"; do
+            if [ -z "${!param}" ]; then
+              echo "::error::Required parameter $param is not set"
               exit 1
-            else
-              echo "$output is set to: $value"
             fi
           done
           
