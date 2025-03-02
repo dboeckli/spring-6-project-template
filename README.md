@@ -18,7 +18,7 @@ This project serves as a template for Spring Boot 6 applications. It provides a 
 2. In the new project's Settings:
     - Enable 'Automatically delete head branches'
     - Enable 'Always suggest updating pull request branches'
-3. Set Branch Protection Rules similar to this template project. Do not Lock Master branch there
+3. Set Branch Protection Rules similar to this template project. Do not Lock Master branch there.
 
 ### 2. Local Development Setup
 1. Clone the newly created project.

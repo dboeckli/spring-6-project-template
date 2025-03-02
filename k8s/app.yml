@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
         - name: spring-6-project-template
-          image: domboeckli/spring-6-project-template:0.0.13-SNAPSHOT
+          image: domboeckli/spring-6-project-template:${VERSION.TO.REPLACE}
           env:
             #- name: SPRING_PROFILES_ACTIVE
             #  value: postgres
