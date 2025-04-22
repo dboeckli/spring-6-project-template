@@ -558,13 +558,20 @@
                     </execution>
                     <execution>
                         <id>helm-push-to-docker</id>
-                        <phase>package</phase>
+                        <phase>deploy</phase>
                         <goals>
                             <goal>push</goal> <!-- upload to docker -->
                         </goals>
                         <configuration>
+                            <!--
                             <pushRepo>
                                 <name>oci://ghcr.io/${env.DOCKER_USER}/${project.artifactId}</name>
+                                <username>${env.DOCKER_USER}</username>
+                                <password>${env.DOCKER_TOKEN}</password>
+                            </pushRepo>
+                            -->
+                            <pushRepo>
+                                <name>oci://registry-1.docker.io/${env.DOCKER_USER}/${project.artifactId}</name>
                                 <username>${env.DOCKER_USER}</username>
                                 <password>${env.DOCKER_TOKEN}</password>
                             </pushRepo>
