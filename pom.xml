@@ -498,6 +498,7 @@
                     <skip>false</skip>
                     <generateRepoIndex>true</generateRepoIndex>
                     <templateOutputDir>${project.build.directory}/helm-templated</templateOutputDir>
+                    <updateChartYaml>true</updateChartYaml>
                 </configuration>
 
                 <executions>
