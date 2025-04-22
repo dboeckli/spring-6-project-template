@@ -570,13 +570,15 @@
                                 <password>${env.GITHUB_TOKEN}</password>
                             </pushRepo>
                             -->
+                            <uploadRepoStable>
+                                <name>stable-repo</name>
+                                <url>oci://registry-1.docker.io/${env.DOCKER_USER}/helm-charts</url>
+                            </uploadRepoStable>
                             <pushRepo>
                                 <name>oci://registry-1.docker.io/${env.DOCKER_USER}/helm-charts</name>
                                 <username>${env.DOCKER_USER}</username>
                                 <password>${env.DOCKER_TOKEN}</password>
                             </pushRepo>
-                            <chartDirectory>${project.build.directory}/helm/repo</chartDirectory>
-                            <chartVersion>${helm.chart.version}</chartVersion>
                         </configuration>
                     </execution>
                 </executions>
