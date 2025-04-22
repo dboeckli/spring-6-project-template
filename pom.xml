@@ -566,15 +566,17 @@
                             <!--
                             <pushRepo>
                                 <name>oci://ghcr.io/${env.DOCKER_USER}/${project.artifactId}</name>
-                                <username>${env.DOCKER_USER}</username>
-                                <password>${env.DOCKER_TOKEN}</password>
+                                <username>${env.GITHUB_ACTOR}</username>
+                                <password>${env.GITHUB_TOKEN}</password>
                             </pushRepo>
                             -->
                             <pushRepo>
-                                <name>oci://registry-1.docker.io/${env.DOCKER_USER}/${project.artifactId}</name>
+                                <name>oci://registry-1.docker.io/${env.DOCKER_USER}/helm-charts</name>
                                 <username>${env.DOCKER_USER}</username>
                                 <password>${env.DOCKER_TOKEN}</password>
                             </pushRepo>
+                            <chartDirectory>${project.build.directory}/helm-charts/</chartDirectory>
+                            <chartVersion>${helm.chart.version}</chartVersion>
                         </configuration>
                     </execution>
                 </executions>
