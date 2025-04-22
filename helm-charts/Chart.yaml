@@ -2,5 +2,5 @@ apiVersion: v2
 name: @project.artifactId@
 description: A Helm chart for Spring 6 Project Template
 type: application
-version: @project.version@
+version: @helm.chart.version@
 appVersion: @project.version@
