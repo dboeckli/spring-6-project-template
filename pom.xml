@@ -265,16 +265,15 @@
                         <configuration>
                             <target>
                                 <propertyfile file="${project.build.directory}/helm.properties">
-                                    <entry key="helm.chart.version" value="${project.version}" />
+                                    <entry key="helm.chart.version" value="${project.version}-${git.commit.id.abbrev}" />
                                 </propertyfile>
-                                <!-- Ersetze Unterstriche durch Punkte -->
+                                <!-- Ersetze ungültige Zeichen durch Punkte -->
                                 <replaceregexp file="${project.build.directory}/helm.properties"
-                                               match="([0-9]+\.[0-9]+\.[0-9]+)_(.*)-(.*)"
-                                               replace="\1-\2.\3"
+                                               match="([0-9]+\.[0-9]+\.[0-9]+)[-_](.*)[-]?SNAPSHOT"
+                                               replace="\1-\2"
                                                byline="true" />
-                                <!-- Ersetze verbleibende Unterstriche durch Punkte -->
                                 <replaceregexp file="${project.build.directory}/helm.properties"
-                                               match="_"
+                                               match="[^0-9a-zA-Z.-]"
                                                replace="."
                                                byline="true" />
                                 <property file="${project.build.directory}/helm.properties" />
