@@ -574,7 +574,8 @@
                                 <name>stable-repo</name>
                                 <!-- https://index.docker.io/v1/ -->
                                 <!-- oci://registry-1.docker.io/${env.DOCKER_USER} -->
-                                <url>registry-1.docker.io/${env.DOCKER_USER}</url>
+                                <!--<url>registry-1.docker.io/${env.DOCKER_USER}</url>-->
+                                <url>https://index.docker.io/v1/</url>
                                 <username>${env.DOCKER_USER}</username>
                                 <password>${env.DOCKER_TOKEN}</password>
                             </uploadRepoStable>
