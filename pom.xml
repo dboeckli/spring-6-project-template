@@ -557,6 +557,21 @@
                         </goals>
                     </execution>
                     <execution>
+                        <id>helm-login</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>registry-login</goal>
+                        </goals>
+                        <configuration>
+                            <uploadRepoStable>
+                                <name>stable-repo</name>
+                                <url>registry-1.docker.io/${env.DOCKER_USER}</url>
+                                <username>${env.DOCKER_USER}</username>
+                                <password>${env.DOCKER_TOKEN}</password>
+                            </uploadRepoStable>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>helm-push-to-docker</id>
                         <phase>deploy</phase>
                         <!-- https://forums.docker.com/t/how-to-build-push-helm-chart-to-docker-hub/133548 -->
@@ -564,13 +579,6 @@
                             <goal>push</goal> <!-- upload to docker -->
                         </goals>
                         <configuration>
-                            <!--
-                            <pushRepo>
-                                <name>oci://ghcr.io/${env.DOCKER_USER}/${project.artifactId}</name>
-                                <username>${env.GITHUB_ACTOR}</username>
-                                <password>${env.GITHUB_TOKEN}</password>
-                            </pushRepo>
-                            -->
                             <skipPushLogin>true</skipPushLogin>
                             <insecure>true</insecure>
                             <uploadRepoStable>
