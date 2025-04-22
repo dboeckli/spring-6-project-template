@@ -572,13 +572,10 @@
                             -->
                             <uploadRepoStable>
                                 <name>stable-repo</name>
-                                <url>oci://registry-1.docker.io/${env.DOCKER_USER}/helm-charts</url>
-                            </uploadRepoStable>
-                            <pushRepo>
-                                <name>oci://registry-1.docker.io/${env.DOCKER_USER}/helm-charts</name>
+                                <url>registry-1.docker.io/${env.DOCKER_USER}/helm-charts</url>
                                 <username>${env.DOCKER_USER}</username>
                                 <password>${env.DOCKER_TOKEN}</password>
-                            </pushRepo>
+                            </uploadRepoStable>
                         </configuration>
                     </execution>
                 </executions>
