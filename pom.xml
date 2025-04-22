@@ -257,6 +257,36 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-helm-version</id>
+                        <phase>initialize</phase>
+                        <configuration>
+                            <target>
+                                <propertyfile file="${project.build.directory}/helm.properties">
+                                    <entry key="helm.chart.version" value="${project.version}" />
+                                </propertyfile>
+                                <replaceregexp file="${project.build.directory}/helm.properties"
+                                               match="([0-9]+\.[0-9]+\.[0-9]+)_(.*)-(.*)"
+                                               replace="\1-\2-\3"
+                                               byline="true" />
+                                <replaceregexp file="${project.build.directory}/helm.properties"
+                                               match="_"
+                                               replace="-"
+                                               byline="true" />
+                                <property file="${project.build.directory}/helm.properties" />
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <!--
@@ -281,6 +311,9 @@
                                     </includes>
                                 </resource>
                             </resources>
+                            <filters>
+                                <filter>${project.build.directory}/helm.properties</filter>
+                            </filters>
                         </configuration>
                     </execution>
 
@@ -449,36 +482,6 @@
                                 </publishRegistry>
                             </docker>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>generate-helm-version</id>
-                        <phase>initialize</phase>
-                        <configuration>
-                            <target>
-                                <propertyfile file="${project.build.directory}/helm.properties">
-                                    <entry key="helm.chart.version" value="${project.version}" />
-                                </propertyfile>
-                                <replaceregexp file="${project.build.directory}/helm.properties"
-                                               match="([0-9]+\.[0-9]+\.[0-9]+)_(.*)-(.*)"
-                                               replace="\1-\2-\3"
-                                               byline="true" />
-                                <replaceregexp file="${project.build.directory}/helm.properties"
-                                               match="_"
-                                               replace="-"
-                                               byline="true" />
-                                <property file="${project.build.directory}/helm.properties" />
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
