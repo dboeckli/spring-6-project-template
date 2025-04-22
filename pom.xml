@@ -562,31 +562,14 @@
                         <goals>
                             <goal>push</goal> <!-- upload to docker -->
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>upload-help-charts</id>
-                        <goals>
-                            <goal>upload</goal>
-                        </goals>
-                        <phase>deploy</phase>
                         <configuration>
-                            <uploadRepoStable>
-                                <name>stable-repo</name>
-                                <url>https://ghcr.io</url>
-                                <type>GITHUB</type>
-                                <username>${env.GITHUB_ACTOR}</username>
-                                <password>${env.GITHUB_TOKEN}</password>
-                            </uploadRepoStable>
-                            <uploadRepoSnapshot>
-                                <name>snapshot-repo</name>
-                                <url>https://ghcr.io</url>
-                                <type>GITHUB</type>
-                                <username>${env.GITHUB_ACTOR}</username>
-                                <password>${env.GITHUB_TOKEN}</password>
-                            </uploadRepoSnapshot>
+                            <pushRepo>
+                                <name>oci://ghcr.io/${env.DOCKER_USER}/${project.artifactId}</name>
+                                <username>${env.DOCKER_USER}</username>
+                                <password>${env.DOCKER_TOKEN}</password>
+                            </pushRepo>
                         </configuration>
                     </execution>
-
                 </executions>
             </plugin>
 
