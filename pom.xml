@@ -579,7 +579,7 @@
                                 <!-- oci://registry-1.docker.io/${env.DOCKER_USER} -->
                                 <!--<url>registry-1.docker.io/v2</url>-->
                                 <!--<url>registry-1.docker.io/${env.DOCKER_USER}</url>-->
-                                <url>oci://registry-1.docker.io/${env.DOCKER_USER}</url>
+                                <url>registry-1.docker.io/${env.DOCKER_USER}</url>
                                 <!--
                                 C:\Data\Develoment\projects\spring-6-project-template\target\helm\repo git:[feature/add-helm-charts]
 helm push spring-6-project-template-0.0.13-SNAPSHOT.tgz  oci://registry-1.docker.io/domboeckli
