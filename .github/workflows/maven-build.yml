@@ -39,9 +39,6 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml.
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-      - name: Create k8s Kind Cluster
-        uses: helm/kind-action@v1.12.0
-
       - name: Verify Variables and Secrets
         env:
           DOCKER_USER: ${{ vars.DOCKER_USER }}
@@ -141,7 +138,10 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml.
-          settings-path: ${{ github.workspace }} # location for the settings.xml file  
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1.12.0
 
       - name: show variables
         id: show_build_variables
@@ -209,7 +209,10 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml.
-          settings-path: ${{ github.workspace }} # location for the settings.xml file       
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1.12.0
 
       - name: Run Maven Build
         env:
