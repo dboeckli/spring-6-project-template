@@ -571,6 +571,8 @@
                                 <password>${env.GITHUB_TOKEN}</password>
                             </pushRepo>
                             -->
+                            <skipPushLogin>true</skipPushLogin>
+                            <insecure>true</insecure>
                             <uploadRepoStable>
                                 <name>stable-repo</name>
                                 <!-- https://index.docker.io/v1/ -->
@@ -586,8 +588,7 @@ Digest: sha256:3eeb4ecfd259efd8bd84511bdb58ae4abebdff3a8bbf54da567acee2f7c15b9d
                                 -->
                                 <username>${env.DOCKER_USER}</username>
                                 <password>${env.DOCKER_TOKEN}</password>
-                                <skipPushLogin>true</skipPushLogin>
-                                <insecure>true</insecure>
+
                             </uploadRepoStable>
                         </configuration>
                     </execution>
