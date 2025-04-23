@@ -573,21 +573,31 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>helm-login-and-psuh</id>
+                        <id>helm-login</id>
                         <phase>deploy</phase>
                         <goals>
                             <goal>registry-login</goal>
-                            <goal>push</goal>
                         </goals>
                         <configuration>
-                            <!--<skip>true</skip>-->
-                            <!--<insecure>true</insecure>-->
-                            <skipPushLogin>true</skipPushLogin>
                             <uploadRepoStable>
                                 <name>stable-repo</name>
                                 <url>registry-1.docker.io</url>
                                 <username>${env.DOCKER_USER}</username>  <!-- registry username -->
                                 <password>${env.DOCKER_TOKEN}</password> <!-- registry password or identity token -->
+                            </uploadRepoStable>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>helm-push</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>push</goal>
+                        </goals>
+                        <configuration>
+                            <skipPushLogin>true</skipPushLogin>
+                            <uploadRepoStable>
+                                <name>stable-repo</name>
+                                <url>oci://registry-1.docker.io/domboeckli</url>
                             </uploadRepoStable>
                         </configuration>
                     </execution>
