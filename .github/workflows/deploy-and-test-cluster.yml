@@ -100,6 +100,15 @@ jobs:
           if ! kubectl wait --for=condition=ready pod -l app=spring-6-project-template --timeout=180s; then
             echo "Pod did not become ready within 180 seconds. Displaying logs:"
             kubectl get pods -l app=spring-6-project-template
+            echo "### X1"
+            kubectl get pods
+            echo "### X2"
+            kubectl describe pods
+            echo "### X3"
+            kubectl get events --sort-by=.metadata.creationTimestamp
+            echo "### X4"
+          
+            
             POD_NAME=$(kubectl get pods -l app=spring-6-project-template -o jsonpath="{.items[0].metadata.name}")
             kubectl logs $POD_NAME
             echo "Describing the pod:"
