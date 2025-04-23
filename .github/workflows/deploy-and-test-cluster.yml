@@ -111,11 +111,12 @@ jobs:
           echo "::notice:: ### Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}: $BUILD_LINK"
 
       - name: Display Deployment Information
+        if: always()
         run: |
           echo "Deployment Information:"
-          kubectl get deployment spring-6-project-template -o yaml
+          kubectl get all --all-namespaces
+          kubectl describe pods
           echo "Helm Release Information:"
-          helm list
-          helm get all spring-6-project-template    
-          
+          helm list --all-namespaces
+          helm get all spring-6-project-template   
 
