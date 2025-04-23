@@ -597,7 +597,7 @@
                             <skipPushLogin>true</skipPushLogin>
                             <uploadRepoStable>
                                 <name>stable-repo</name>
-                                <url>oci://registry-1.docker.io/domboeckli</url>
+                                <url>registry-1.docker.io/domboeckli</url>
                             </uploadRepoStable>
                         </configuration>
                     </execution>
