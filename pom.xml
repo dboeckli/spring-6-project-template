@@ -584,7 +584,7 @@
                             <skipPushLogin>true</skipPushLogin>
                             <uploadRepoStable>
                                 <name>stable-repo</name>
-                                <url>oci://registry-1.docker.io/${env.DOCKER_USER}</url>
+                                <url>registry-1.docker.io/${env.DOCKER_USER}</url>
                                 <username>${env.DOCKER_USER}</username>  <!-- registry username -->
                                 <password>${env.DOCKER_TOKEN}</password> <!-- registry password or identity token -->
                             </uploadRepoStable>
