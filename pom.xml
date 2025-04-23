@@ -577,13 +577,16 @@
                         <phase>deploy</phase>
                         <goals>
                             <goal>registry-login</goal>
+                            <goal>push</goal>
                         </goals>
                         <configuration>
+                            <insecure>true</insecure>
+                            <skipPushLogin>true</skipPushLogin>
                             <uploadRepoStable>
                                 <name>stable-repo</name>
-                                <url>registry-1.docker.io/${env.DOCKER_USER}</url>
-                                <username>${env.DOCKER_USER}</username>
-                                <password>${env.DOCKER_TOKEN}</password>
+                                <url>oci://registry-1.docker.io/${env.DOCKER_USER}</url>
+                                <username>${env.DOCKER_USER}</username>  <!-- registry username -->
+                                <password>${env.DOCKER_TOKEN}</password> <!-- registry password or identity token -->
                             </uploadRepoStable>
                         </configuration>
                     </execution>
@@ -625,16 +628,6 @@ Digest: sha256:3eeb4ecfd259efd8bd84511bdb58ae4abebdff3a8bbf54da567acee2f7c15b9d
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
-                    <execution>
-                        <id>debug-helm-push-to-docker</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>tree</executable>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>helm-push-to-docker</id>
                         <phase>deploy</phase>
