@@ -21,7 +21,7 @@ on:
         default: 'None'
 
 jobs:
-  deploy-and-test-cluster:
+  deploy-app-with-kubectl:
     runs-on: ubuntu-latest
     steps:
       - name: Show Version
@@ -60,6 +60,56 @@ jobs:
         run: |
           echo "Deployment Information:"
           kubectl get deployment spring-6-project-template -o yaml
-          
+
+  deploy-app-with-helm:
+    runs-on: ubuntu-latest
+    needs: deploy-app-with-kubectl
+
+    steps:
+      - name: Show Version
+        run: |
+          echo "Deploying Version: ${{ inputs.version }}"
+          echo "Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}"
+
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1.12.0
+
+      - name: Pull Helm Chart
+        run: |
+          helm pull oci://registry-1.docker.io/domboeckli/spring-6-project-template --version 0.0.13-d32f260
+          tar -xvf spring-6-project-template-*.tgz  
+
+      - name: Deploy application with Helm
+        run: |
+          # Install/upgrade the Helm chart
+          helm upgrade --install spring-6-project-template ./spring-6-project-template \
+          --set image.tag=0.0.13-d32f260 \
+          --wait --timeout 180s
+
+      - name: Wait for Pods to be ready
+        run: |
+          if ! kubectl wait --for=condition=ready pod -l app=spring-6-project-template --timeout=180s; then
+            echo "Pod did not become ready within 180 seconds. Displaying logs:"
+            kubectl get pods -l app=spring-6-project-template
+            POD_NAME=$(kubectl get pods -l app=spring-6-project-template -o jsonpath="{.items[0].metadata.name}")
+            kubectl logs $POD_NAME
+            echo "Describing the pod:"
+            kubectl describe pod $POD_NAME
+            exit 1
+          fi
+          BUILD_LINK="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ inputs.deployed-by-build }}"
+          echo "::notice:: ### Deployed Version: ${{ inputs.version }}"
+          echo "::notice:: ### Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}: $BUILD_LINK"
+
+      - name: Display Deployment Information
+        run: |
+          echo "Deployment Information:"
+          kubectl get deployment spring-6-project-template -o yaml
+          echo "Helm Release Information:"
+          helm list
+          helm get all spring-6-project-template    
           
 
