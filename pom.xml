@@ -538,32 +538,29 @@
                     <chartVersion>${helm.chart.version}</chartVersion>
                     <skipLint>true</skipLint>
                     <useLocalHelmBinary>true</useLocalHelmBinary>
-                    <skipInit>true</skipInit>
                     <skip>false</skip>
-                    <generateRepoIndex>true</generateRepoIndex>
+                    <!--<generateRepoIndex>true</generateRepoIndex>-->
                     <templateOutputDir>${project.build.directory}/helm-templated</templateOutputDir>
-                    <updateChartYaml>true</updateChartYaml>
+                    <!--<updateChartYaml>true</updateChartYaml>-->
                 </configuration>
 
                 <executions>
                     <execution>
                         <id>execute-helm-template</id>
-                        <goals>
-                            <!-- Locally render templates -->
-                            <goal>template</goal>
-                        </goals>
                         <phase>test</phase>
+                        <goals>
+                            <goal>template</goal> <!-- Locally render templates -->
+                        </goals>
                         <configuration>
                             <skipTemplate>false</skipTemplate>
                         </configuration>
                     </execution>
                     <execution>
                         <id>execute-helm-dry-run</id>
-                        <goals>
-                            <!-- simulates an install -->
-                            <goal>dry-run</goal>
-                        </goals>
                         <phase>test</phase>
+                        <goals>
+                            <goal>dry-run</goal> <!-- simulates an install -->
+                        </goals>
                     </execution>
                     <execution>
                         <id>helm-package</id>
@@ -605,6 +602,7 @@
             </plugin>
 
             <!-- https://forums.docker.com/t/how-to-build-push-helm-chart-to-docker-hub/133548 -->
+            <!-- both steps are skipped. for documenation purpose only -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -616,6 +614,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
+                            <skip>true</skip>
                             <executable>bash</executable>
                             <arguments>
                                 <argument>-c</argument>
@@ -630,7 +629,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <!-- helm push spring-6-project-template-0.0.13-SNAPSHOT.tgz  oci://registry-1.docker.io/domboeckli -->
+                            <skip>true</skip>
                             <executable>helm</executable>
                             <arguments>
                                 <argument>push</argument>
