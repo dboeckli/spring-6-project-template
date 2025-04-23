@@ -573,51 +573,21 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>helm-login</id>
+                        <id>helm-login-and-psuh</id>
                         <phase>deploy</phase>
                         <goals>
                             <goal>registry-login</goal>
                             <goal>push</goal>
                         </goals>
                         <configuration>
-                            <skip>true</skip>
-                            <insecure>true</insecure>
+                            <!--<skip>true</skip>-->
+                            <!--<insecure>true</insecure>-->
                             <skipPushLogin>true</skipPushLogin>
                             <uploadRepoStable>
                                 <name>stable-repo</name>
                                 <url>registry-1.docker.io</url>
                                 <username>${env.DOCKER_USER}</username>  <!-- registry username -->
                                 <password>${env.DOCKER_TOKEN}</password> <!-- registry password or identity token -->
-                            </uploadRepoStable>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>helm-push-to-docker</id>
-                        <phase>deploy</phase>
-                        <!-- https://forums.docker.com/t/how-to-build-push-helm-chart-to-docker-hub/133548 -->
-                        <goals>
-                            <goal>push</goal> <!-- upload to docker -->
-                        </goals>
-                        <configuration>
-                            <skip>true</skip>
-                            <skipPushLogin>true</skipPushLogin>
-                            <insecure>true</insecure>
-                            <uploadRepoStable>
-                                <name>stable-repo</name>
-                                <!-- https://index.docker.io/v1/ -->
-                                <!-- oci://registry-1.docker.io/${env.DOCKER_USER} -->
-                                <!--<url>registry-1.docker.io/v2</url>-->
-                                <!--<url>registry-1.docker.io/${env.DOCKER_USER}</url>-->
-                                <url>registry-1.docker.io/${env.DOCKER_USER}</url>
-                                <!--
-                                C:\Data\Develoment\projects\spring-6-project-template\target\helm\repo git:[feature/add-helm-charts]
-helm push spring-6-project-template-0.0.13-SNAPSHOT.tgz  oci://registry-1.docker.io/domboeckli
-Pushed: registry-1.docker.io/domboeckli/spring-6-project-template:0.0.13-SNAPSHOT
-Digest: sha256:3eeb4ecfd259efd8bd84511bdb58ae4abebdff3a8bbf54da567acee2f7c15b9d
-                                -->
-                                <username>${env.DOCKER_USER}</username>
-                                <password>${env.DOCKER_TOKEN}</password>
-
                             </uploadRepoStable>
                         </configuration>
                     </execution>
