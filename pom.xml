@@ -293,19 +293,35 @@
                                 <propertyfile file="${project.build.directory}/helm.properties">
                                     <entry key="helm.chart.version" value="${project.version}" />
                                 </propertyfile>
-                                <!-- Regel 1: Ersetze Feature-Branch-Version mit Git-Hash -->
                                 <replaceregexp file="${project.build.directory}/helm.properties"
                                                match="helm\.chart\.version=([0-9]+\.[0-9]+\.[0-9]+)_.*-SNAPSHOT"
                                                replace="helm.chart.version=\1-${git.commit.id.abbrev}"
                                                byline="true" />
-                                <!-- Regel 2 und 3: Behalte einfache Versionen und SNAPSHOT-Versionen bei -->
-                                <!-- Diese Regeln erfordern keine Aktion, da wir die ursprüngliche Version beibehalten -->
                                 <property file="${project.build.directory}/helm.properties" />
                             </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>${project.build.directory}/helm.properties</file>
+                            </files>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
