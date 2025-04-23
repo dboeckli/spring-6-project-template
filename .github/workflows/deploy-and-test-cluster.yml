@@ -119,4 +119,6 @@ jobs:
           echo "Helm Release Information:"
           helm list --all-namespaces
           helm get all spring-6-project-template   
+          echo "Show Logs"
+          kubectl logs $(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -o jsonpath="{.items[0].metadata.name}")
 
