@@ -57,6 +57,7 @@ jobs:
           echo "::notice:: ### Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}: $BUILD_LINK"
 
       - name: Display Deployment Information
+        if: always()
         run: |
           echo "Deployment Information:"
           kubectl get deployment spring-6-project-template -o yaml
@@ -98,18 +99,6 @@ jobs:
       - name: Wait for Pods to be ready
         run: |
           if ! kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=spring-6-project-template --timeout=180s; then
-            echo "Pod did not become ready within 180 seconds. Displaying logs:"
-            echo "### X0"
-            kubectl get pods -l app=spring-6-project-template
-            echo "### X1"
-            kubectl get pods
-            echo "### X2"
-            kubectl describe pods
-            echo "### X3"
-            kubectl get events --sort-by=.metadata.creationTimestamp
-            echo "### X4"
-          
-            
             POD_NAME=$(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -o jsonpath="{.items[0].metadata.name}")
             kubectl logs $POD_NAME
             echo "Describing the pod:"
@@ -117,7 +106,7 @@ jobs:
             exit 1
           fi
           BUILD_LINK="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ inputs.deployed-by-build }}"
-          echo "::notice:: ### Deployed Version: ${{ inputs.version }}"
+          echo "::notice:: ### Helm Deployed Version: ${{ inputs.version }}"
           echo "::notice:: ### Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}: $BUILD_LINK"
 
       - name: Display Deployment Information
