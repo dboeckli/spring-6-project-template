@@ -84,10 +84,16 @@ jobs:
 
       - name: Deploy application with Helm
         run: |
+          # Debug information
+          kubectl get namespace
+          kubectl get pods --all-namespaces
+          helm version
+          helm list --all-namespaces
           # Install/upgrade the Helm chart
           helm upgrade --install spring-6-project-template ./spring-6-project-template \
           --set image.tag=0.0.13-d32f260 \
-          --wait --timeout 180s
+          --wait --timeout 5m \
+          --debug
 
       - name: Wait for Pods to be ready
         run: |
