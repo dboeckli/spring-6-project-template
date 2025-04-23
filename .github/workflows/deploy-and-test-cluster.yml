@@ -91,7 +91,7 @@ jobs:
           helm list --all-namespaces
           # Install/upgrade the Helm chart
           helm upgrade --install spring-6-project-template ./spring-6-project-template \
-          --set image.tag=0.0.13-d32f260 \
+          --set image.tag=${{ inputs.version }} \
           --wait --timeout 5m \
           --debug
 
@@ -121,4 +121,6 @@ jobs:
           helm get all spring-6-project-template   
           echo "Show Logs"
           kubectl logs $(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -o jsonpath="{.items[0].metadata.name}")
+          echo "Show Events"
+          kubectl get events --sort-by=.metadata.creationTimestamp
 
