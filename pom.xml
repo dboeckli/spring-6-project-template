@@ -316,6 +316,7 @@
                 <executions>
                     <execution>
                         <phase>initialize</phase>
+                        <id>read-helm-properties</id>
                         <goals>
                             <goal>read-project-properties</goal>
                         </goals>
