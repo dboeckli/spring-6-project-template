@@ -100,7 +100,7 @@ jobs:
 
       - name: Pull Helm Chart
         env:
-          HELM_CHART_VERSION: ${{ steps.get_helm_version.outputs.ORGANIZATION }}
+          HELM_CHART_VERSION: ${{ steps.get_helm_version.outputs.HELM_CHART_VERSION }}
         run: |
           if [ -z "$HELM_CHART_VERSION" ]; then
             echo "Error: HELM_CHART_VERSION is not set. Aborting."
