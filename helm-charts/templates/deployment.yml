@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "spring-6-project-template.fullname" . }}
+  name: {{ include "application-template.fullname" . }}
   labels:
-    {{- include "spring-6-project-template.labels" . | nindent 4 }}
+    {{- include "application-template.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "spring-6-project-template.selectorLabels" . | nindent 6 }}
+      {{- include "application-template.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "spring-6-project-template.selectorLabels" . | nindent 8 }}
+        {{- include "application-template.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
