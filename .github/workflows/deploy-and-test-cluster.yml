@@ -93,7 +93,7 @@ jobs:
           mvn -B -e initialize
           HELM_CHART_VERSION=$(grep 'helm.chart.version' target/helm.properties | cut -d'=' -f2)
           echo "helm chart version is: $HELM_CHART_VERSION"
-          echo "helm.chart.version=$HELM_CHART_VERSION" >> $GITHUB_OUTPUT
+          echo "HELM_CHART_VERSION=$HELM_CHART_VERSION" >> $GITHUB_OUTPUT
 
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.12.0
