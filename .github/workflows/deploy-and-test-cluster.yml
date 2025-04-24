@@ -92,13 +92,15 @@ jobs:
           mvn -B -e initialize
           HELM_CHART_VERSION=$(grep 'helm.chart.version' target/helm.properties | cut -d'=' -f2)
           echo "helm chart version is: $HELM_CHART_VERSION"
+          echo "helm.chart.version=$HELM_CHART_VERSION" >> $GITHUB_OUTPUT
 
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.12.0
 
       - name: Pull Helm Chart
         run: |
-          helm pull oci://registry-1.docker.io/domboeckli/spring-6-project-template --version "$HELM_CHART_VERSION"
+          echo "Pulling Helm Chart Version: ${{ env.HELM_CHART_VERSION }}"
+          helm pull oci://registry-1.docker.io/domboeckli/spring-6-project-template --version ${{ env.HELM_CHART_VERSION }}
           tar -xvf spring-6-project-template-*.tgz  
 
       - name: Deploy application with Helm
