@@ -90,7 +90,7 @@ jobs:
           set -o nounset     # abort on unbound variable
           set -o errexit     # abort on nonzero exit status
           mvn -B -e initialize
-          HELM_CHART_VERSION=$(mvn help:evaluate -Dexpression=helm.chart.version -q -DforceStdout)
+          HELM_CHART_VERSION=$(grep 'helm.chart.version' target/helm.properties | cut -d'=' -f2)
           echo "helm chart version is: $HELM_CHART_VERSION"
 
       - name: Create k8s Kind Cluster
