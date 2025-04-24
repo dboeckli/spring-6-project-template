@@ -90,7 +90,13 @@ jobs:
           set -o pipefail    # don't hide errors within pipes
           set -o nounset     # abort on unbound variable
           set -o errexit     # abort on nonzero exit status
-          mvn -B -e initialize
+          if [[ "${BRANCH_NAME}" == "master" ||  "${BRANCH_NAME}" == "main" ]]; then
+            echo "::notice:: ### Build of Master."
+          else
+            echo "::notice:: ### Build of Feature Branch."
+            mvn -B versions:set -e -DnewVersion="${{ inputs.version }}"
+          fi
+          mvn -B -e initialize s $GITHUB_WORKSPACE/settings.xml
           HELM_CHART_VERSION=$(grep 'helm.chart.version' target/helm.properties | cut -d'=' -f2)
           echo "helm chart version is: $HELM_CHART_VERSION"
           echo "HELM_CHART_VERSION=$HELM_CHART_VERSION" >> $GITHUB_OUTPUT
