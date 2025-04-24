@@ -90,6 +90,7 @@ jobs:
           set -o pipefail    # don't hide errors within pipes
           set -o nounset     # abort on unbound variable
           set -o errexit     # abort on nonzero exit status
+          BRANCH_NAME=${{ github.ref_name }}
           if [[ "${BRANCH_NAME}" == "master" ||  "${BRANCH_NAME}" == "main" ]]; then
             echo "::notice:: ### Build of Master."
           else
