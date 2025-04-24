@@ -84,7 +84,8 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml.
           settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-      - name: Run Maven Build
+      - name: Get Helm Version
+        id: get_helm_version
         run: |
           set -o pipefail    # don't hide errors within pipes
           set -o nounset     # abort on unbound variable
@@ -98,9 +99,15 @@ jobs:
         uses: helm/kind-action@v1.12.0
 
       - name: Pull Helm Chart
+        env:
+          HELM_CHART_VERSION: ${{ steps.get_helm_version.outputs.ORGANIZATION }}
         run: |
-          echo "Pulling Helm Chart Version: ${{ env.HELM_CHART_VERSION }}"
-          helm pull oci://registry-1.docker.io/domboeckli/spring-6-project-template --version ${{ env.HELM_CHART_VERSION }}
+          if [ -z "$HELM_CHART_VERSION" ]; then
+            echo "Error: HELM_CHART_VERSION is not set. Aborting."
+            exit 1
+          fi
+          echo "Pulling Helm Chart Version: $HELM_CHART_VERSION"
+          helm pull oci://registry-1.docker.io/domboeckli/spring-6-project-template --version "$HELM_CHART_VERSION"
           tar -xvf spring-6-project-template-*.tgz  
 
       - name: Deploy application with Helm
