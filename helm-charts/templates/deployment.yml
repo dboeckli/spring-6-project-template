@@ -19,6 +19,8 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.spring.profiles.active | default "local" }}
             - name: SPRING_APPLICATION_JSON
               value: {{ .Values.springApplicationJson | toJson | quote }}
           ports:

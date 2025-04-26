@@ -10,6 +10,10 @@ service:
   port: 80
   targetPort: 8080
 
+spring:
+  profiles:
+    active: local
+
 springApplicationJson:
   management:
     endpoint:
