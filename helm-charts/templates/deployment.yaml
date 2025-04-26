@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "application-template.fullname" . }}
+  namespace: {{ .Values.deployment.namespace }}
   labels:
     {{- include "application-template.labels" . | nindent 4 }}
 spec:
@@ -19,6 +20,8 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            - name: JAVA_TIMEZONE
+            - value: {{ $.Values.global.timezone }}
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.spring.profiles.active | default "local" }}
             - name: SPRING_APPLICATION_JSON
@@ -47,3 +50,15 @@ spec:
             periodSeconds: {{ .Values.probes.liveness.periodSeconds }}
             timeoutSeconds: {{ .Values.probes.liveness.timeoutSeconds }}
             failureThreshold: {{ .Values.probes.liveness.failureThreshold }}
+          volumeMounts:
+            - mountPath: "{{ $.Values.global.timezonePath }}"
+              name: time
+              readOnly: true
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+
+      volumes:
+        - name: time
+          hostPath:
+            path: {{ $.Values.global.timezonePath }}
+            type: ""
