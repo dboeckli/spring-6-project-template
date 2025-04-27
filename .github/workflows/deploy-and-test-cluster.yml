@@ -163,16 +163,19 @@ jobs:
           echo "--- Show Events"
           kubectl get events --sort-by=.metadata.creationTimestamp --all-namespaces
           
-          echo "--- Show Logs"
-          PODS=$(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -o jsonpath="{.items[*].metadata.name}" --all-namespaces)
+          echo "--- Show Logs (if pods exist)"
+          PODS=$(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -o jsonpath="{.items[*].metadata.name}" -n spring-6-project-template)
           if [ -n "$PODS" ]; then
             for POD in $PODS; do
               echo "Logs for pod $POD:"
-              kubectl logs $POD --all-containers
+              kubectl logs $POD -n spring-6-project-template --all-containers
             done
           else
-            echo "No pods found with label app.kubernetes.io/name=spring-6-project-template"
-            echo "Listing all pods:"
-            kubectl get pods --all-namespaces
+            echo "No pods found with label app.kubernetes.io/name=spring-6-project-template in spring-6-project-template namespace"
+            echo "Listing all pods in spring-6-project-template namespace:"
+            kubectl get pods -n spring-6-project-template
           fi
+          
+          echo "--- Describe Helm release"
+          helm get manifest spring-6-project-template -n spring-6-project-template || echo "Helm release not found"
 
