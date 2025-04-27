@@ -71,9 +71,6 @@ jobs:
         run: |
           echo "Deploying Version: ${{ inputs.version }}"
           echo "Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}"
-          NAMESPACE=$(helm get manifest spring-6-project-template | grep -m 1 'namespace:' | awk '{print $2}')
-          echo "### Application deployed to namespace: $NAMESPACE"
-          echo "NAMESPACE=$NAMESPACE" >> $GITHUB_OUTPUT
 
       - name: Check out the repository
         uses: actions/checkout@v4
@@ -116,6 +113,10 @@ jobs:
             echo "Error: HELM_CHART_VERSION is not set. Aborting."
             exit 1
           fi
+          NAMESPACE=$(helm get manifest spring-6-project-template | grep -m 1 'namespace:' | awk '{print $2}')
+          echo "### Application deployed to namespace: $NAMESPACE"
+          echo "NAMESPACE=$NAMESPACE" >> $GITHUB_OUTPUT
+          
           echo "Pulling Helm Chart Version: $HELM_CHART_VERSION"
           helm pull oci://registry-1.docker.io/domboeckli/spring-6-project-template --version "$HELM_CHART_VERSION"
           tar -xvf spring-6-project-template-*.tgz  
