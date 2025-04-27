@@ -147,13 +147,22 @@ jobs:
         if: always()
         run: |
           echo "Deployment Information:"
+          
+          echo "--- Get all namespaces"
           kubectl get all --all-namespaces
+          
+          echo "--- Describe all pods"
           kubectl describe pods
-          echo "Helm Release Information:"
+          
+          echo "--- Helm list alle namespaces:"
           helm list --all-namespaces
+          
+          echo "--- Helm get app:"
           helm get all spring-6-project-template   
-          echo "Show Logs"
-          kubectl logs $(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -o jsonpath="{.items[0].metadata.name}")
-          echo "Show Events"
+          
+          echo "--- Show Events"
           kubectl get events --sort-by=.metadata.creationTimestamp
+          
+          echo "--- Show Logs"
+          kubectl logs $(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -o jsonpath="{.items[0].metadata.name}")   
 
