@@ -21,7 +21,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: JAVA_TIMEZONE
-            - value: "{{ .Values.global.timezone }}"
+              value: "{{ .Values.global.timezone }}"
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.spring.profiles.active | default "local" }}
             - name: SPRING_APPLICATION_JSON
