@@ -152,17 +152,27 @@ jobs:
           kubectl get all --all-namespaces
           
           echo "--- Describe all pods"
-          kubectl describe pods
+          kubectl describe pods --all-namespaces
           
-          echo "--- Helm list alle namespaces:"
+          echo "--- Helm list all namespaces:"
           helm list --all-namespaces
           
           echo "--- Helm get app:"
           helm get all spring-6-project-template   
           
           echo "--- Show Events"
-          kubectl get events --sort-by=.metadata.creationTimestamp
+          kubectl get events --sort-by=.metadata.creationTimestamp --all-namespaces
           
           echo "--- Show Logs"
-          kubectl logs $(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -o jsonpath="{.items[0].metadata.name}")   
+          PODS=$(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -o jsonpath="{.items[*].metadata.name}" --all-namespaces)
+          if [ -n "$PODS" ]; then
+            for POD in $PODS; do
+              echo "Logs for pod $POD:"
+              kubectl logs $POD --all-containers
+            done
+          else
+            echo "No pods found with label app.kubernetes.io/name=spring-6-project-template"
+            echo "Listing all pods:"
+            kubectl get pods --all-namespaces
+          fi
 
