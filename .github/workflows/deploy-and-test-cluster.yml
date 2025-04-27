@@ -43,15 +43,17 @@ jobs:
 
       - name: Wait for Pods to be ready
         run: |
-          if ! kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=spring-6-project-template -n spring-6-project-template --timeout=180s; then
-            POD_NAME=$(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -n spring-6-project-template -o jsonpath="{.items[0].metadata.name}")
-            kubectl logs $POD_NAME -n spring-6-project-template
+          if ! kubectl wait --for=condition=ready pod -l app=spring-6-project-template --timeout=180s; then
+            echo "Pod did not become ready within 180 seconds. Displaying logs:"
+            kubectl get pods -l app=spring-6-project-template
+            POD_NAME=$(kubectl get pods -l app=spring-6-project-template -o jsonpath="{.items[0].metadata.name}")
+            kubectl logs $POD_NAME
             echo "Describing the pod:"
-            kubectl describe pod $POD_NAME -n spring-6-project-template
+            kubectl describe pod $POD_NAME
             exit 1
           fi
           BUILD_LINK="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ inputs.deployed-by-build }}"
-          echo "::notice:: ### Helm Deployed Version: ${{ inputs.version }}"
+          echo "::notice:: ### Deployed Version: ${{ inputs.version }}"
           echo "::notice:: ### Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}: $BUILD_LINK"
 
       - name: Display Deployment Information
@@ -130,11 +132,11 @@ jobs:
 
       - name: Wait for Pods to be ready
         run: |
-          if ! kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=spring-6-project-template --timeout=180s; then
-            POD_NAME=$(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -o jsonpath="{.items[0].metadata.name}")
-            kubectl logs $POD_NAME
+          if ! kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=spring-6-project-template -n spring-6-project-template --timeout=180s; then
+            POD_NAME=$(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -o jsonpath="{.items[0].metadata.name}" -n spring-6-project-template)
+            kubectl logs $POD_NAME -n spring-6-project-template
             echo "Describing the pod:"
-            kubectl describe pod $POD_NAME
+            kubectl describe pod $POD_NAME -n spring-6-project-template
             exit 1
           fi
           BUILD_LINK="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ inputs.deployed-by-build }}"
