@@ -129,6 +129,9 @@ jobs:
           --set image.tag=${{ inputs.version }} \
           --wait --timeout 5m \
           --debug
+          # Get the namespace from the deployment
+          DEPLOYED_NAMESPACE=$(kubectl get deployment -l app.kubernetes.io/name=spring-6-project-template --all-namespaces --output=jsonpath='{.items[0].metadata.namespace}')
+          echo "### Application deployed to namespace: $DEPLOYED_NAMESPACE"
 
       - name: Wait for Pods to be ready
         run: |
