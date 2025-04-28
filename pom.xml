@@ -212,7 +212,11 @@
                         <exclude>**/toolchains.xml</exclude>
                         <exclude>**/settings.xml</exclude>
                         <exclude>.run/**</exclude>
+                        <exclude>.mvn/**</exclude>
+                        <exclude>.idea/**</exclude>
                         <exclude>**/banner.txt</exclude>
+                        <exclude>mvn</exclude>
+                        <exclude>mvn.cmd</exclude>
                     </excludes>
                 </configuration>
             </plugin>
