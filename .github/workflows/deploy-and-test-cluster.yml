@@ -155,7 +155,3 @@ jobs:
             echo "Listing all pods in $NAMESPACE namespace:"
             kubectl get pods -n $NAMESPACE
           fi
-          
-          echo "--- Describe Helm release"
-          helm get manifest spring-6-project-template -n $NAMESPACE || echo "Helm release not found in namespace $NAMESPACE"
-
