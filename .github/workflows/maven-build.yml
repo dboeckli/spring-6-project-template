@@ -344,6 +344,7 @@ jobs:
           BRANCH_MVN_VERSION: ${{needs.setup.outputs.BRANCH_MVN_VERSION}}
           HELM_CHART_VERSION: ${{needs.build.outputs.HELM_CHART_VERSION}}
           NAMESPACE: ${{needs.build.outputs.NAMESPACE}}
+          ARTIFACT_ID: ${{needs.setup.outputs.ARTIFACT_ID}}
 
         run: |
           # Check if required parameters are set
@@ -360,6 +361,7 @@ jobs:
           echo "NAMESPACE: $NAMESPACE"
           
           gh workflow run deploy-and-test-cluster.yml -R ${{ github.repository }} -r ${{ github.ref }} \
+          -f "application-name=$ARTIFACT_ID" \
           -f "version=$BRANCH_MVN_VERSION" \
           -f "helm-chart-version=$HELM_CHART_VERSION" \
           -f "namespace=$NAMESPACE" \
