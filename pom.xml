@@ -575,14 +575,14 @@
                         <id>execute-helm-dry-run</id>
                         <phase>install</phase>
                         <goals>
-                            <goal>dry-run</goal> <!-- simulates an install -->
+                            <goal>dry-run</goal> <!-- simulates an install. output goes to target/helm-templated -->
                         </goals>
                     </execution>
                     <execution>
                         <id>helm-package</id>
                         <phase>install</phase>
                         <goals>
-                            <goal>package</goal>
+                            <goal>package</goal> <!-- creates tgz file to target/helm -->
                         </goals>
                     </execution>
                     <execution>

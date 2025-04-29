@@ -113,6 +113,8 @@ jobs:
             echo "Error: HELM_CHART_VERSION is not set. Aborting."
             exit 1
           fi
+          
+          mvn helm dry-run
           NAMESPACE=$(helm template spring-6-project-template ./spring-6-project-template | grep -m 1 'namespace:' | awk '{print $2}')
           if [ -z "$NAMESPACE" ]; then
             NAMESPACE="default"
