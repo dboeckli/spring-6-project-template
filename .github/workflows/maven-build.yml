@@ -120,6 +120,10 @@ jobs:
     needs: [ setup ]
     if: endsWith(needs.setup.outputs.MVN_VERSION, '-SNAPSHOT')
 
+    outputs:
+      HELM_CHART_VERSION: ${{ steps.get_helm_version_and_namespace.outputs.HELM_CHART_VERSION }}
+      NAMESPACE: ${{ steps.get_helm_version_and_namespace.outputs.NAMESPACE }}
+
     permissions:
       contents: read
       packages: write
@@ -209,7 +213,7 @@ jobs:
           if [ -z "$NAMESPACE" ]; then
             NAMESPACE="default"
           fi
-          echo "### Application is using namespace: $NAMESPACE"
+          echo "### namespace is: $NAMESPACE"
           echo "NAMESPACE=$NAMESPACE" >> $GITHUB_OUTPUT
           
   analyze:
@@ -333,7 +337,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.TRIGGER_WORKFLOW_TOKEN }}
           BRANCH_MVN_VERSION: ${{needs.setup.outputs.BRANCH_MVN_VERSION}}
+          HELM_CHART_VERSION: ${{needs.build.outputs.HELM_CHART_VERSION}}
+          NAMESPACE: ${{needs.build.outputs.NAMESPACE}}
+
         run: |
+          echo "Trigger Deployment with variables"
+          echo "BRANCH_MVN_VERSION: $BRANCH_MVN_VERSION"
+          echo "HELM_CHART_VERSION: $HELM_CHART_VERSION"
+          echo "NAMESPACE: $NAMESPACE"
+          
           gh workflow run deploy-and-test-cluster.yml -R ${{ github.repository }} -r ${{ github.ref }} \
           -f "version=$BRANCH_MVN_VERSION" \
           -f "deployed-by-build=${{ github.run_id }}" \
