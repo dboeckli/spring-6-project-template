@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
         - name: spring-6-project-template
-          image: domboeckli/spring-6-project-template:${VERSION.TO.REPLACE}
+          image: domboeckli/spring-6-project-template:@project.version@
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: local
