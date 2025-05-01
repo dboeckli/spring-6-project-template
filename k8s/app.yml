@@ -1,37 +1,36 @@
 ---
-## TODO: RENAME PROJECT NAME
 apiVersion: v1
 kind: Service
 metadata:
-  name: spring-6-project-template
+  name: @project.artifactId@
 spec:
   type: NodePort
   ports:
     - port: 80
       targetPort: 8080
   selector:
-    app: spring-6-project-template
+    app: @project.artifactId@
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: spring-6-project-template
+  name: @project.artifactId@
   labels:
-    app: spring-6-project-template
+    app: @project.artifactId@
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: spring-6-project-template
+      app: @project.artifactId@
   template:
     metadata:
       labels:
-        app: spring-6-project-template
+        app: @project.artifactId@
     spec:
       containers:
-        - name: spring-6-project-template
-          image: domboeckli/spring-6-project-template:${VERSION.TO.REPLACE}
+        - name: @project.artifactId@
+          image: domboeckli/@project.artifactId@:@project.version@
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: local
