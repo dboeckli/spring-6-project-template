@@ -120,6 +120,10 @@ jobs:
     needs: [ setup ]
     if: endsWith(needs.setup.outputs.MVN_VERSION, '-SNAPSHOT')
 
+    outputs:
+      HELM_CHART_VERSION: ${{ steps.get_helm_version_and_namespace.outputs.HELM_CHART_VERSION }}
+      NAMESPACE: ${{ steps.get_helm_version_and_namespace.outputs.NAMESPACE }}
+
     permissions:
       contents: read
       packages: write
@@ -193,6 +197,29 @@ jobs:
          path: |
            target/failsafe-reports/
            target/surefire-reports/
+
+      - name: get helm version and namespace
+        id: get_helm_version_and_namespace
+        env:
+          ARTIFACT_ID: ${{needs.setup.outputs.ARTIFACT_ID}}
+        run: |
+          set -o pipefail    # don't hide errors within pipes
+          set -o nounset     # abort on unbound variable
+          set -o errexit     # abort on nonzero exit status 
+          
+          HELM_CHART_VERSION=$(grep 'helm.chart.version' target/helm.properties | cut -d'=' -f2)
+          echo "### helm chart version is: $HELM_CHART_VERSION"
+          echo "HELM_CHART_VERSION=$HELM_CHART_VERSION" >> $GITHUB_OUTPUT
+          
+          NAMESPACE=$(grep 'name:' target/helm-templated/$ARTIFACT_ID/templates/namespace.yaml | awk '{print $2}') 
+          if [ -z "$NAMESPACE" ]; then
+            NAMESPACE="default"
+          fi
+          echo "### namespace is: $NAMESPACE"
+          echo "NAMESPACE=$NAMESPACE" >> $GITHUB_OUTPUT 
+          
+          echo ":sailboat: Helm Chart Version: $HELM_CHART_VERSION" >> $GITHUB_STEP_SUMMARY
+          echo ":sailboat: Namespace: $NAMESPACE" >> $GITHUB_STEP_SUMMARY
           
   analyze:
     runs-on: ubuntu-latest
@@ -315,9 +342,21 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.TRIGGER_WORKFLOW_TOKEN }}
           BRANCH_MVN_VERSION: ${{needs.setup.outputs.BRANCH_MVN_VERSION}}
+          HELM_CHART_VERSION: ${{needs.build.outputs.HELM_CHART_VERSION}}
+          NAMESPACE: ${{needs.build.outputs.NAMESPACE}}
+          ARTIFACT_ID: ${{needs.setup.outputs.ARTIFACT_ID}}
         run: |
+          echo "Trigger Deployment with variables"
+          echo "ARTIFACT_ID: $ARTIFACT_ID"
+          echo "BRANCH_MVN_VERSION: $BRANCH_MVN_VERSION"
+          echo "HELM_CHART_VERSION: $HELM_CHART_VERSION"
+          echo "NAMESPACE: $NAMESPACE"
+          
           gh workflow run deploy-and-test-cluster.yml -R ${{ github.repository }} -r ${{ github.ref }} \
+          -f "application-name=$ARTIFACT_ID" \
           -f "version=$BRANCH_MVN_VERSION" \
+          -f "helm-chart-version=$HELM_CHART_VERSION" \
+          -f "namespace=$NAMESPACE" \
           -f "deployed-by-build=${{ github.run_id }}" \
           -f "deployed-by-workflow=${{ github.workflow }}"
 

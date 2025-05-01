@@ -5,9 +5,21 @@ run-name: >
 on:
   workflow_dispatch:
     inputs:
+      application-name:
+        type: string
+        description: 'Application Name'
+        required: true
       version:
         type: string
         description: 'Version to deploy'
+        required: true
+      helm-chart-version:
+        type: string
+        description: 'Helm Chart Version'
+        required: true
+      namespace:
+        type: string
+        description: 'Namespace'
         required: true
       deployed-by-build:
         type: string
@@ -26,50 +38,7 @@ jobs:
     steps:
       - name: Show Version
         run: |
-          echo "Deploying Version: ${{ inputs.version }}"
-          echo "Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}"
-
-      - name: Check out the repository
-        uses: actions/checkout@v4
-
-      - name: Create k8s Kind Cluster
-        uses: helm/kind-action@v1.12.0
-
-      - name: Deploy application
-        run: |
-          # Replace the version placeholder in the deployment manifest
-          sed -i 's/${VERSION.TO.REPLACE}/${{ inputs.version }}/g' k8s/app.yml
-          kubectl apply -f k8s/
-
-      - name: Wait for Pods to be ready
-        run: |
-          if ! kubectl wait --for=condition=ready pod -l app=spring-6-project-template --timeout=180s; then
-            echo "Pod did not become ready within 180 seconds. Displaying logs:"
-            kubectl get pods -l app=spring-6-project-template
-            POD_NAME=$(kubectl get pods -l app=spring-6-project-template -o jsonpath="{.items[0].metadata.name}")
-            kubectl logs $POD_NAME
-            echo "Describing the pod:"
-            kubectl describe pod $POD_NAME
-            exit 1
-          fi
-          BUILD_LINK="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ inputs.deployed-by-build }}"
-          echo "::notice:: ### Deployed Version: ${{ inputs.version }}"
-          echo "::notice:: ### Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}: $BUILD_LINK"
-
-      - name: Display Deployment Information
-        if: always()
-        run: |
-          echo "Deployment Information:"
-          kubectl get deployment spring-6-project-template -o yaml
-
-  deploy-app-with-helm:
-    runs-on: ubuntu-latest
-    needs: deploy-app-with-kubectl
-
-    steps:
-      - name: Show Version
-        run: |
-          echo "Deploying Version: ${{ inputs.version }}"
+          echo "Deploying Application ${{ inputs.application-name }}, Version: ${{ inputs.version }}"
           echo "Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}"
 
       - name: Check out the repository
@@ -82,67 +51,119 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml.
-          settings-path: ${{ github.workspace }} # location for the settings.xml file
+          settings-path: ${{ github.workspace }} # location for t
 
-      - name: Get Helm Version
-        id: get_helm_version
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1.12.0
+
+      - name: Deploy application
+        env:
+          APPLICATION_NAME: ${{ inputs.application-name }}
+          VERSION: ${{ inputs.version }}
         run: |
-          set -o pipefail    # don't hide errors within pipes
-          set -o nounset     # abort on unbound variable
-          set -o errexit     # abort on nonzero exit status
-          BRANCH_NAME=${{ github.ref_name }}
-          if [[ "${BRANCH_NAME}" == "master" ||  "${BRANCH_NAME}" == "main" ]]; then
-            echo "::notice:: ### Build of Master."
-          else
-            echo "::notice:: ### Build of Feature Branch."
-            mvn -B versions:set -e -DnewVersion="${{ inputs.version }}"
+          mvn -B versions:set -e -DnewVersion="$VERSION"
+          mvn -B process-resources
+          cat target/k8s/app.yml
+          echo "Deploying Application $APPLICATION_NAME with version $VERSION"
+          kubectl apply -f target/k8s/ --v=6
+
+      - name: Wait for Pods to be ready
+        env:
+          APPLICATION_NAME: ${{ inputs.application-name }}
+        run: |
+          if ! kubectl wait --for=condition=ready pod -l app=$APPLICATION_NAME --timeout=180s; then
+            echo "Pod did not become ready within 180 seconds. Displaying logs:"
+            kubectl get pods -l app=$APPLICATION_NAME
+            POD_NAME=$(kubectl get pods -l app=$APPLICATION_NAME -o jsonpath="{.items[0].metadata.name}")
+            kubectl logs $POD_NAME
+            echo "Describing the pod:"
+            kubectl describe pod $POD_NAME
+            exit 1
           fi
-          mvn -B -e initialize -s $GITHUB_WORKSPACE/settings.xml
-          HELM_CHART_VERSION=$(grep 'helm.chart.version' target/helm.properties | cut -d'=' -f2)
-          echo "helm chart version is: $HELM_CHART_VERSION"
-          echo "HELM_CHART_VERSION=$HELM_CHART_VERSION" >> $GITHUB_OUTPUT
+          BUILD_LINK="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ inputs.deployed-by-build }}"
+          echo "::notice:: ### Deployed Version: ${{ inputs.version }}"
+          echo "::notice:: ### Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}: $BUILD_LINK"
+
+      - name: Display Deployment Information
+        env:
+          APPLICATION_NAME: ${{ inputs.application-name }}
+        if: always()
+        run: |
+          echo "Deployment Information:"
+          
+          echo "--- Pods:"
+          kubectl get pods -n default
+          
+          echo "--- Describe pods:"
+          kubectl describe pods -n default
+          
+          echo "--- Services:"
+          kubectl get services -n default
+          
+          echo "--- Show Events:"
+          kubectl get events --sort-by=.metadata.creationTimestamp -n default
+          
+          echo "--- Show Logs (if pods exist)"
+          PODS=$(kubectl get pods -l app=$APPLICATION_NAME -o jsonpath="{.items[*].metadata.name}" -n default)
+          if [ -n "$PODS" ]; then
+            for POD in $PODS; do
+              echo "Logs for pod $POD:"
+              kubectl logs $POD -n default --all-containers
+            done
+          else
+            echo "No pods found with label app=$APPLICATION_NAME in default namespace"
+            echo "Listing all pods in default namespace:"
+            kubectl get pods -n default
+          fi      
+
+  deploy-app-with-helm:
+    runs-on: ubuntu-latest
+    needs: deploy-app-with-kubectl
+
+    steps:
+      - name: Show Version
+        run: |
+          echo "Deploying Application ${{ inputs.application-name }} with Version: ${{ inputs.version }}, Helm chart version: ${{ inputs.helm-chart-version }}, to namespace ${{ inputs.namespace }}"
+          echo "Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}"
+
+      - name: Check out the repository
+        uses: actions/checkout@v4
 
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.12.0
 
       - name: Pull Helm Chart
         env:
-          HELM_CHART_VERSION: ${{ steps.get_helm_version.outputs.HELM_CHART_VERSION }}
+          HELM_CHART_VERSION: ${{ inputs.helm-chart-version }}
+          DOCKER_USER: ${{ vars.DOCKER_USER }}
+          APPLICATION_NAME: ${{ inputs.application-name }}
         run: |
-          if [ -z "$HELM_CHART_VERSION" ]; then
-            echo "Error: HELM_CHART_VERSION is not set. Aborting."
-            exit 1
-          fi
-          
-          mvn helm dry-run
-          NAMESPACE=$(helm template spring-6-project-template ./spring-6-project-template | grep -m 1 'namespace:' | awk '{print $2}')
-          if [ -z "$NAMESPACE" ]; then
-            NAMESPACE="default"
-          fi
-          
-          echo "### Application deployed to namespace: $NAMESPACE"
-          echo "NAMESPACE=$NAMESPACE" >> $GITHUB_OUTPUT
-          
           echo "Pulling Helm Chart Version: $HELM_CHART_VERSION"
-          helm pull oci://registry-1.docker.io/domboeckli/spring-6-project-template --version "$HELM_CHART_VERSION"
-          tar -xvf spring-6-project-template-*.tgz  
+          helm pull oci://registry-1.docker.io/$DOCKER_USER/$APPLICATION_NAME --version "$HELM_CHART_VERSION"
+          tar -xvf $APPLICATION_NAME-*.tgz  
 
       - name: Deploy application with Helm
+        env:
+          APP_VERSION: ${{ inputs.version }}
+          APPLICATION_NAME: ${{ inputs.application-name }}
         run: |
           # Install/upgrade the Helm chart
-          helm upgrade --install spring-6-project-template ./spring-6-project-template \
-          --set image.tag=${{ inputs.version }} \
+          echo "Deploying Application: $APP_VERSION"
+          helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME \
+          --set image.tag=${APP_VERSION} \
           --wait --timeout 5m \
           --debug
-          
 
       - name: Wait for Pods to be ready
+        env:
+          NAMESPACE: ${{ inputs.namespace }}
+          APPLICATION_NAME: ${{ inputs.application-name }}
         run: |
-          if ! kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=spring-6-project-template -n spring-6-project-template --timeout=180s; then
-            POD_NAME=$(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -o jsonpath="{.items[0].metadata.name}" -n spring-6-project-template)
-            kubectl logs $POD_NAME -n spring-6-project-template
+          if ! kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=$APPLICATION_NAME -n $NAMESPACE --timeout=180s; then
+            POD_NAME=$(kubectl get pods -l app.kubernetes.io/name=$APPLICATION_NAME -o jsonpath="{.items[0].metadata.name}" -n $NAMESPACE)
+            kubectl logs $POD_NAME -n $NAMESPACE
             echo "Describing the pod:"
-            kubectl describe pod $POD_NAME -n spring-6-project-template
+            kubectl describe pod $POD_NAME -n $NAMESPACE
             exit 1
           fi
           BUILD_LINK="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ inputs.deployed-by-build }}"
@@ -150,38 +171,32 @@ jobs:
           echo "::notice:: ### Deployment triggered by workflow ${{ inputs.deployed-by-workflow }}. Run number: ${{ inputs.deployed-by-build }}: $BUILD_LINK"
 
       - name: Display Deployment Information
+        env:
+          NAMESPACE: ${{ inputs.namespace }}
+          APPLICATION_NAME: ${{ inputs.application-name }}
         if: always()
         run: |
           echo "Deployment Information:"
           
-          echo "--- Get all namespaces"
-          kubectl get all --all-namespaces
+          echo "--- Pods in $NAMESPACE namespace:"
+          kubectl get pods -n $NAMESPACE
           
-          echo "--- Describe all pods"
-          kubectl describe pods --all-namespaces
+          echo "--- Describe pods in $NAMESPACE namespace:"
+          kubectl describe pods -n $NAMESPACE
           
-          echo "--- Helm list all namespaces:"
-          helm list --all-namespaces
-          
-          echo "--- Helm get app:"
-          helm get all spring-6-project-template   
-          
-          echo "--- Show Events"
-          kubectl get events --sort-by=.metadata.creationTimestamp --all-namespaces
+          echo "--- Show Events in $NAMESPACE namespace:"
+          kubectl get events --sort-by=.metadata.creationTimestamp -n $NAMESPACE
           
           echo "--- Show Logs (if pods exist)"
-          PODS=$(kubectl get pods -l app.kubernetes.io/name=spring-6-project-template -o jsonpath="{.items[*].metadata.name}" -n spring-6-project-template)
+          PODS=$(kubectl get pods -l app.kubernetes.io/name=$APPLICATION_NAME -o jsonpath="{.items[*].metadata.name}" -n $NAMESPACE)
           if [ -n "$PODS" ]; then
             for POD in $PODS; do
               echo "Logs for pod $POD:"
-              kubectl logs $POD -n spring-6-project-template --all-containers
+              kubectl logs $POD -n $NAMESPACE --all-containers
             done
           else
-            echo "No pods found with label app.kubernetes.io/name=spring-6-project-template in spring-6-project-template namespace"
-            echo "Listing all pods in spring-6-project-template namespace:"
-            kubectl get pods -n spring-6-project-template
-          fi
-          
-          echo "--- Describe Helm release"
-          helm get manifest spring-6-project-template -n spring-6-project-template || echo "Helm release not found"
+            echo "No pods found with label app.kubernetes.io/name=$APPLICATION_NAME in $NAMESPACE namespace"
+            echo "Listing all pods in $NAMESPACE namespace:"
+            kubectl get pods -n $NAMESPACE
+          fi          
 
