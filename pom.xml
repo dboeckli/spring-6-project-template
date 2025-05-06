@@ -97,6 +97,31 @@
                 <skip.docker.publish>false</skip.docker.publish>
             </properties>
         </profile>
+
+        <profile>
+            <id>main-branch</id>
+            <activation>
+                <property>
+                    <name>env.GITHUB_REF</name>
+                    <value>refs/heads/main</value>
+                </property>
+            </activation>
+            <properties>
+                <docker.image.tag>latest</docker.image.tag>
+            </properties>
+        </profile>
+        <profile>
+            <id>master-branch</id>
+            <activation>
+                <property>
+                    <name>env.GITHUB_REF</name>
+                    <value>refs/heads/master</value>
+                </property>
+            </activation>
+            <properties>
+                <docker.image.tag>latest</docker.image.tag>
+            </properties>
+        </profile>
     </profiles>
 
     <distributionManagement>
@@ -491,7 +516,7 @@
                             <image>
                                 <name>local/${project.artifactId}:${project.version}</name>
                                 <tags>
-                                    local/${project.artifactId}:latest
+                                    local/${project.artifactId}:${docker.image.tag}
                                 </tags>
                                 <publish>false</publish>
                             </image>
