@@ -130,6 +130,15 @@ $APPLICATION_NAME = Get-ChildItem -Directory | Where-Object { $_.LastWriteTime -
 helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME --wait --timeout 5m --debug
 ```
 
+show logs
+```powershell
+kubectl get pods -l app.kubernetes.io/name=$APPLICATION_NAME -n sdjpa-intro
+```
+replace $POD with pods from the command above
+```powershell
+kubectl logs $POD -n sdjpa-intro --all-containers
+```
+
 uninstall
 ```powershell
 helm uninstall $APPLICATION_NAME
