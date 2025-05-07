@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: domboeckli/@project.artifactId@
+  repository: @docker.repo@/@project.artifactId@
   tag: @project.version@
   pullPolicy: IfNotPresent
 
@@ -15,6 +15,7 @@ service:
   type: NodePort
   port: 80
   targetPort: 8080
+  nodePort: 30080
 
 resources:
   limits:
@@ -32,13 +33,6 @@ global:
 spring:
   profiles:
     active: local
-
-springApplicationJson:
-  management:
-    endpoint:
-      health:
-        probes:
-          add-additional-paths: true
 
 probes:
   startup:
