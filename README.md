@@ -91,6 +91,8 @@ Note: Ensure all required secrets (RELEASE_TOKEN, DOCKER_USER, DOCKER_ACCESS_TOK
 
 ## Deployment with Kubernetes
 
+Deployment goes into the default namespace.
+
 To deploy all resources:
 ```bash
 kubectl apply -f target/k8s/
@@ -127,21 +129,21 @@ tar -xvf $file.Name
 install
 ```powershell
 $APPLICATION_NAME = Get-ChildItem -Directory | Where-Object { $_.LastWriteTime -ge $file.LastWriteTime } | Select-Object -ExpandProperty Name
-helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME --wait --timeout 5m --debug
+helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME --namespace spring-6-project-template --create-namespace --wait --timeout 5m --debug
 ```
 
 show logs
 ```powershell
-kubectl get pods -l app.kubernetes.io/name=$APPLICATION_NAME -n sdjpa-intro
+kubectl get pods -l app.kubernetes.io/name=$APPLICATION_NAME -n spring-6-project-template
 ```
 replace $POD with pods from the command above
 ```powershell
-kubectl logs $POD -n sdjpa-intro --all-containers
+kubectl logs $POD -n spring-6-project-template --all-containers
 ```
 
 uninstall
 ```powershell
-helm uninstall $APPLICATION_NAME
+helm uninstall $APPLICATION_NAME --namespace spring-6-project-template
 ```
 
 You can use the actuator rest call to verify via port 30080
