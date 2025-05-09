@@ -89,6 +89,64 @@ To create a new release:
 
 Note: Ensure all required secrets (RELEASE_TOKEN, DOCKER_USER, DOCKER_ACCESS_TOKEN) are properly set in your GitHub repository settings before running the release workflow.
 
+## Deployment with Kubernetes
+
+Deployment goes into the default namespace.
+
+To deploy all resources:
+```bash
+kubectl apply -f target/k8s/
+```
+
+To remove all resources:
+```bash
+kubectl delete -f target/k8s/
+```
+
+Check
+```bash
+kubectl get deployments -o wide
+kubectl get pods -o wide
+```
+
+You can use the actuator rest call to verify via port 30080
+
+## Deployment with Helm
+
+Be aware that we are using a different namespace here (not default).
+
+Go to the directory where the tgz file has been created after 'mvn install'
+```powershell
+cd target/helm/repo
+```
+
+unpack
+```powershell
+$file = Get-ChildItem -Filter *.tgz | Select-Object -First 1
+tar -xvf $file.Name
+```
+
+install
+```powershell
+$APPLICATION_NAME = Get-ChildItem -Directory | Where-Object { $_.LastWriteTime -ge $file.LastWriteTime } | Select-Object -ExpandProperty Name
+helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME --namespace spring-6-project-template --create-namespace --wait --timeout 5m --debug
+```
+
+show logs
+```powershell
+kubectl get pods -l app.kubernetes.io/name=$APPLICATION_NAME -n spring-6-project-template
+```
+replace $POD with pods from the command above
+```powershell
+kubectl logs $POD -n spring-6-project-template --all-containers
+```
+
+uninstall
+```powershell
+helm uninstall $APPLICATION_NAME --namespace spring-6-project-template
+```
+
+You can use the actuator rest call to verify via port 30080
 
 ## Additional Information
 - The initial build in GitHub may fail. Follow the steps above to resolve any issues.

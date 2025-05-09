@@ -30,16 +30,17 @@
 
     <properties>
         <java.version>21</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <github.acions.build>false</github.acions.build>
         <skip.docker.build>false</skip.docker.build>
         <skip.docker.publish>true</skip.docker.publish>
         <skip.start.stop.springboot>false</skip.start.stop.springboot>
-        <docker.image.tag>development</docker.image.tag> <!-- for feature branches -->
 
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <docker.image.tag>development</docker.image.tag> <!-- for feature branches -->
+        <docker.repo>local</docker.repo>
 
         <logbook.version>3.12.0</logbook.version>
         <logstash-logback.version>8.1</logstash-logback.version>
@@ -59,7 +60,7 @@
         <sonar.scm.provider>git</sonar.scm.provider>
         <jacoco.version>0.8.13</jacoco.version>
 
-        <!--suppress UnresolvedMavenProperty -->
+        <!--suppress UnresolvedMavenProperty: is set by git git-commit-id-maven-plugin -->
         <buildNumber>${git.commit.id.abbrev}</buildNumber>
     </properties>
 
@@ -95,6 +96,7 @@
             <properties>
                 <github.acions.build>true</github.acions.build>
                 <skip.docker.publish>false</skip.docker.publish>
+                <docker.repo>domboeckli</docker.repo>
             </properties>
         </profile>
 
@@ -241,8 +243,8 @@
                         <exclude>.mvn/**</exclude>
                         <exclude>.idea/**</exclude>
                         <exclude>**/banner.txt</exclude>
-                        <exclude>mvn</exclude>
-                        <exclude>mvn.cmd</exclude>
+                        <exclude>mvnw</exclude>
+                        <exclude>mvnw.cmd</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -325,6 +327,7 @@
                                 <propertyfile file="${project.build.directory}/helm.properties">
                                     <entry key="helm.chart.version" value="v${project.version}" />
                                 </propertyfile>
+                                <!--suppress UnresolvedMavenProperty: git.commit.id.abbrev is set by git git-commit-id-maven-plugin -->
                                 <replaceregexp file="${project.build.directory}/helm.properties"
                                                match="helm\.chart\.version=(v[0-9]+\.[0-9]+\.[0-9]+)_.*-SNAPSHOT"
                                                replace="helm.chart.version=\1-${git.commit.id.abbrev}"
@@ -540,10 +543,9 @@
                             </image>
                             <docker>
                                 <publishRegistry>
-                                    <!-- GITHUB_ACTOR and GITHUB_TOKEN are set by gitHub Actions -->
-                                    <!--suppress UnresolvedMavenProperty -->
+                                    <!--suppress UnresolvedMavenProperty: GITHUB_ACTOR is set by GitHub Actions -->
                                     <username>${env.GITHUB_ACTOR}</username>
-                                    <!--suppress UnresolvedMavenProperty -->
+                                    <!--suppress UnresolvedMavenProperty: GITHUB_TOKEN is set by GitHub Actions -->
                                     <password>${env.GITHUB_TOKEN}</password>
                                     <url>https://ghcr.io</url><!-- gitHub packages -->
                                 </publishRegistry>
@@ -560,20 +562,19 @@
                         <configuration>
                             <skip>${skip.docker.publish}</skip>
                             <image>
-                                <!--suppress UnresolvedMavenProperty -->
+                                <!--suppress UnresolvedMavenProperty: DOCKER_USER is set by GitHub Actions -->
                                 <name>${env.DOCKER_USER}/${project.artifactId}:${project.version}</name>
                                 <tags>
-                                    <!--suppress UnresolvedMavenProperty -->
+                                    <!--suppress UnresolvedMavenProperty: DOCKER_USER is set by GitHub Actions -->
                                     ${env.DOCKER_USER}/${project.artifactId}:${docker.image.tag}
                                 </tags>
                                 <publish>true</publish>
                             </image>
                             <docker>
                                 <publishRegistry>
-                                    <!-- DOCKER_USER and DOCKER_TOKEN are set by gitHub Actions -->
-                                    <!--suppress UnresolvedMavenProperty -->
+                                    <!--suppress UnresolvedMavenProperty: DOCKER_USER is set by GitHub Actions -->
                                     <username>${env.DOCKER_USER}</username>
-                                    <!--suppress UnresolvedMavenProperty -->
+                                    <!--suppress UnresolvedMavenProperty: DOCKER_TOKEN is set by GitHub Actions -->
                                     <password>${env.DOCKER_TOKEN}</password>
                                     <url>https://index.docker.io/v1/</url>
                                 </publishRegistry>
@@ -591,6 +592,7 @@
 
                 <configuration>
                     <chartDirectory>${project.build.directory}/helm-charts/</chartDirectory>
+                    <!--suppress UnresolvedMavenProperty: helm.chart.version is set by maven antrun plugin -->
                     <chartVersion>${helm.chart.version}</chartVersion>
                     <skipLint>true</skipLint>
                     <useLocalHelmBinary>true</useLocalHelmBinary>
@@ -643,7 +645,9 @@
                             <uploadRepoStable>
                                 <name>stable-repo</name>
                                 <url>registry-1.docker.io</url>
+                                <!--suppress UnresolvedMavenProperty: DOCKER_USER is set by GitHub Actions -->
                                 <username>${env.DOCKER_USER}</username>  <!-- registry username -->
+                                <!--suppress UnresolvedMavenProperty: DOCKER_TOKEN is set by GitHub Actions -->
                                 <password>${env.DOCKER_TOKEN}</password> <!-- registry password or identity token -->
                             </uploadRepoStable>
                         </configuration>
@@ -658,6 +662,7 @@
                             <skipPushLogin>true</skipPushLogin>
                             <uploadRepoStable>
                                 <name>stable-repo</name>
+                                <!--suppress UnresolvedMavenProperty: DOCKER_USER is set by GitHub Actions -->
                                 <url>registry-1.docker.io/${env.DOCKER_USER}</url>
                             </uploadRepoStable>
                         </configuration>
@@ -666,7 +671,7 @@
             </plugin>
 
             <!-- https://forums.docker.com/t/how-to-build-push-helm-chart-to-docker-hub/133548 -->
-            <!-- both steps are skipped. for documenation purpose only -->
+            <!-- both steps are skipped. for documentation purpose only -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -683,6 +688,7 @@
                             <executable>bash</executable>
                             <arguments>
                                 <argument>-c</argument>
+                                <!--suppress UnresolvedMavenProperty: DOCKER_USER is set by GitHub Actions -->
                                 <argument>echo ${env.DOCKER_TOKEN} | helm registry login registry-1.docker.io -u ${env.DOCKER_USER} --password-stdin</argument>
                             </arguments>
                         </configuration>
@@ -698,8 +704,10 @@
                             <executable>helm</executable>
                             <arguments>
                                 <argument>push</argument>
+                                <!--suppress UnresolvedMavenProperty: helm.chart.version is set by maven antrun plugin -->
                                 <argument>./target/helm/repo/${project.artifactId}-${helm.chart.version}.tgz</argument>
-                                <argument>oci://registry-1.docker.io/domboeckli</argument>
+                                <!--suppress UnresolvedMavenProperty: DOCKER_USER is set by GitHub Actions -->
+                                <argument>oci://registry-1.docker.io/${env.DOCKER_USER}</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -710,7 +718,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <!--suppress UnresolvedMavenProperty. argline is set by jacoco -->
+                    <!--suppress UnresolvedMavenProperty: argline is set by jacoco -->
                     <argLine>${argLine} -XX:+EnableDynamicAgentLoading -Xshare:off</argLine>
                 </configuration>
             </plugin>
@@ -719,7 +727,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
-                    <!--suppress UnresolvedMavenProperty. argline is set by jacoco -->
+                    <!--suppress UnresolvedMavenProperty: argline is set by jacoco -->
                     <argLine>${argLine} -XX:+EnableDynamicAgentLoading -Xshare:off</argLine>
                 </configuration>
             </plugin>

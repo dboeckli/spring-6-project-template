@@ -8,6 +8,7 @@ spec:
   ports:
     - port: 80
       targetPort: 8080
+      nodePort: 30080
   selector:
     app: @project.artifactId@
 
@@ -30,15 +31,10 @@ spec:
     spec:
       containers:
         - name: @project.artifactId@
-          image: domboeckli/@project.artifactId@:@project.version@
+          image: @docker.repo@/@project.artifactId@:@project.version@
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: local
-            - name: SPRING_APPLICATION_JSON
-              value: |
-                {
-                  "management.endpoint.health.probes.add-additional-paths": true
-                }
           ports:
             - name: http
               containerPort: 8080

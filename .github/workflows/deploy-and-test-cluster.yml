@@ -146,11 +146,14 @@ jobs:
         env:
           APP_VERSION: ${{ inputs.version }}
           APPLICATION_NAME: ${{ inputs.application-name }}
+          NAMESPACE: ${{ inputs.namespace }}
         run: |
           # Install/upgrade the Helm chart
           echo "Deploying Application: $APP_VERSION"
           helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME \
           --set image.tag=${APP_VERSION} \
+          --namespace ${NAMESPACE} \
+          --create-namespace \
           --wait --timeout 5m \
           --debug
 
@@ -191,8 +194,9 @@ jobs:
           PODS=$(kubectl get pods -l app.kubernetes.io/name=$APPLICATION_NAME -o jsonpath="{.items[*].metadata.name}" -n $NAMESPACE)
           if [ -n "$PODS" ]; then
             for POD in $PODS; do
-              echo "Logs for pod $POD:"
+              echo "---------------- Logs for pod $POD:"
               kubectl logs $POD -n $NAMESPACE --all-containers
+              echo "---------------- End of Logs for pod $POD:"
             done
           else
             echo "No pods found with label app.kubernetes.io/name=$APPLICATION_NAME in $NAMESPACE namespace"
