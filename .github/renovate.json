@@ -8,7 +8,8 @@
         "docker-compose",
         "maven-wrapper",
         "kubernetes",
-        "helm-values"
+        "helm-values",
+        "helmv3"
     ],
     "maven-wrapper": {
         "fileMatch": [
@@ -35,6 +36,11 @@
     "helm-values": {
         "fileMatch": [
             "helm-charts/.+/values\\.ya?ml$"
+        ]
+    },
+    "helmv3": {
+        "fileMatch": [
+            "(^|/)Chart\\.ya?ml$"
         ]
     },
     "packageRules": [
@@ -71,7 +77,7 @@
         "before 5am"
     ],
     "platformAutomerge": false,
-    "dependencyDashboard": false,
+    "dependencyDashboard": true,
     "prHourlyLimit": 0,
     "prConcurrentLimit": 0,
     "baseBranches": [
