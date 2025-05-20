@@ -91,6 +91,11 @@ Note: Ensure all required secrets (RELEASE_TOKEN, DOCKER_USER, DOCKER_ACCESS_TOK
 
 ## Deployment with Kubernetes
 
+To run maven filtering for destination target/k8s
+```bash
+mvn clean install -DskipTests 
+```
+
 Deployment goes into the default namespace.
 
 To deploy all resources:
@@ -114,6 +119,11 @@ You can use the actuator rest call to verify via port 30080
 ## Deployment with Helm
 
 Be aware that we are using a different namespace here (not default).
+
+To run maven filtering for destination target/helm
+```bash
+mvn clean install -DskipTests 
+```
 
 Go to the directory where the tgz file has been created after 'mvn install'
 ```powershell
