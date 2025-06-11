@@ -493,9 +493,7 @@
                         <id>start-springboot-app</id>
                         <goals>
                             <goal>start</goal>
-                            <goal>stop</goal>
                         </goals>
-                        <phase>post-integration-test</phase>
                         <configuration>
                             <skip>${skip.start.stop.springboot}</skip>
                             <wait>1000</wait> <!-- 1000 milliseconds is default -->
@@ -507,6 +505,17 @@
                                 <argument>--spring.cloud.kubernetes.enabled=false</argument>
                                 <argument>--spring.profiles.active=local</argument>
                             </arguments>
+                            <jmxPort>${jmx.server.port}</jmxPort>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>stop-springboot-app</id>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skip.start.stop.springboot}</skip>
                             <jmxPort>${jmx.server.port}</jmxPort>
                         </configuration>
                     </execution>
