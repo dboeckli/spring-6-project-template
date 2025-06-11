@@ -37,12 +37,9 @@ spec:
 
             # Test DNS resolution
             echo "### Testing DNS resolution:"
-            LDAP_FQDN="{{ include "workflow-hello-world-ldap.serviceFQDN" . }}"
-            APIFIRST_FQDN="{{ include "apifirst-server-jpa.serviceFQDN" . }}"
-            echo "nslookup LDAP FQDN: $LDAP_FQDN"
-            nslookup $LDAP_FQDN
-            echo "nslookup APIFIRST_FQDN: $APIFIRST_FQDN"
-            nslookup $APIFIRST_FQDN
+            AP_FQDN="{{ include "application-template.serviceFQDN" . }}"
+            echo "nslookup AP_FQDN: $AP_FQDN"
+            nslookup $AP_FQDN
           fi
 
   restartPolicy: Never
