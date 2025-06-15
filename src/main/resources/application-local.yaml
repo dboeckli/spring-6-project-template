@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   application:
     # // TODO: RENAME ME
@@ -15,6 +18,8 @@ management:
     livenessstate:
       enabled: true
   endpoints:
+    access:
+      default: unrestricted
     web:
       exposure:
         include: "*"
@@ -53,6 +58,3 @@ logbook:
       - path: /swagger-ui/**  # Exclude Swagger UI if used
       - path: /v3/api-docs/** # Exclude OpenAPI docs if used
       # Add more exclusions as needed
-
-server:
-  port: 8080
