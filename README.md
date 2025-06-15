@@ -139,7 +139,7 @@ tar -xvf $file.Name
 install
 ```powershell
 $APPLICATION_NAME = Get-ChildItem -Directory | Where-Object { $_.LastWriteTime -ge $file.LastWriteTime } | Select-Object -ExpandProperty Name
-helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME --namespace spring-6-project-template --create-namespace --wait --timeout 5m --debug
+helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME --namespace spring-6-project-template --create-namespace --wait --timeout 5m --debug --render-subchart-notes
 ```
 
 show logs
@@ -153,7 +153,7 @@ kubectl logs $POD -n spring-6-project-template --all-containers
 
 test
 ```powershell
-helm test $APPLICATION_NAME --namespace workflow-hello-world --logs
+helm test $APPLICATION_NAME --namespace spring-6-project-template --logs
 ```
 
 uninstall
