@@ -60,12 +60,14 @@ jobs:
         env:
           APPLICATION_NAME: ${{ inputs.application-name }}
           VERSION: ${{ inputs.version }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           mvn -B versions:set -e -DnewVersion="$VERSION"
-          mvn -B process-resources
+          mvn -B process-resources -s $GITHUB_WORKSPACE/settings.xml
           cat target/k8s/app.yml
           echo "Deploying Application $APPLICATION_NAME with version $VERSION"
-          kubectl apply -f target/k8s/ --v=6
+          kubectl apply -f target/k8s/ --v=6 -R
 
       - name: Wait for Pods to be ready
         env:
@@ -138,9 +140,9 @@ jobs:
           DOCKER_USER: ${{ vars.DOCKER_USER }}
           APPLICATION_NAME: ${{ inputs.application-name }}
         run: |
-          echo "Pulling Helm Chart Version: $HELM_CHART_VERSION"
+          echo "Pulling Helm Chart Version: $HELM_CHART_VERSION from oci://registry-1.docker.io/$DOCKER_USER/$APPLICATION_NAME"
           helm pull oci://registry-1.docker.io/$DOCKER_USER/$APPLICATION_NAME --version "$HELM_CHART_VERSION"
-          tar -xvf $APPLICATION_NAME-*.tgz  
+          tar -xvf $APPLICATION_NAME-v*.tgz  
 
       - name: Deploy application with Helm
         env:
@@ -149,13 +151,16 @@ jobs:
           NAMESPACE: ${{ inputs.namespace }}
         run: |
           # Install/upgrade the Helm chart
-          echo "Deploying Application: $APP_VERSION"
+          echo "Deploying Application $APPLICATION_NAME: $APP_VERSION"
           helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME \
           --set image.tag=${APP_VERSION} \
           --namespace ${NAMESPACE} \
           --create-namespace \
+          --cleanup-on-fail \
+          --atomic \
           --wait --timeout 5m \
-          --debug
+          --debug \
+          --render-subchart-notes
 
       - name: Wait for Pods to be ready
         env:
@@ -202,7 +207,7 @@ jobs:
             exit $TEST_EXIT_CODE
           else
             echo "All Helm tests passed successfully."
-          fi      
+          fi                 
 
       - name: Display Deployment Information
         env:
@@ -222,7 +227,8 @@ jobs:
           kubectl get events --sort-by=.metadata.creationTimestamp -n $NAMESPACE
           
           echo "--- Show Logs (if pods exist)"
-          PODS=$(kubectl get pods -l app.kubernetes.io/name=$APPLICATION_NAME -o jsonpath="{.items[*].metadata.name}" -n $NAMESPACE)
+          PODS=$(kubectl get pods -o jsonpath="{.items[*].metadata.name}" -n $NAMESPACE)
+          echo "Found pods: $PODS"
           if [ -n "$PODS" ]; then
             for POD in $PODS; do
               echo "---------------- Logs for pod $POD:"
