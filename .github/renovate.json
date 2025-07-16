@@ -28,9 +28,11 @@
             "/helm-charts/.+\\.ya?ml$/"
         ]
     },
+    "ignorePaths": ["helm-charts/values.yaml/image/**"],
     "helm-values": {
         "managerFilePatterns": [
             "/helm-charts/values\\.ya?ml$/",
+            "/helm-charts/dependencies-values\\.ya?ml$/",
             "/helm-charts/.+/values\\.ya?ml$/",
             "/helm-charts/charts/.+/values\\.ya?ml$/"
         ]
