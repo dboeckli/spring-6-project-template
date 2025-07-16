@@ -11,10 +11,9 @@ image:
   tag: @project.version@
   pullPolicy: IfNotPresent
 
-busybox:
-  image:
-    repository: busybox
-    tag: 1.37.0
+busyboxImage:
+  repository: busybox
+  tag: 1.37.0
 
 service:
   type: NodePort
