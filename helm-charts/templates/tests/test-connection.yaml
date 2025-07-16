@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
     - name: test-actuator-health
-      image: busybox:1.37.0
+      image: {{ .Values.busybox.image.repository }}:{{ .Values.busybox.image.tag }}
       command: [ '/bin/sh', '-c' ]
       args:
         - |
