@@ -12,6 +12,7 @@ image:
   pullPolicy: IfNotPresent
 
 busyboxImage:
+  registry: docker.io
   repository: busybox
   tag: 1.37.0
 
