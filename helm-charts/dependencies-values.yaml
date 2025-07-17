@@ -1,3 +1,4 @@
+# this yaml is merged into the values file and deleted before using helm
 busyboxImage:
   repository: busybox
   tag: "1.37.0"
