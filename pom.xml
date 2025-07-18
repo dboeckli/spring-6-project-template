@@ -441,7 +441,7 @@
                 <version>${merge-yaml-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>merge-yaml-files</id>
+                        <id>merge-values-yaml-files</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>mergeYaml</goal>
