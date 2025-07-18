@@ -2,13 +2,16 @@ global:
   timezone: Europe/Zurich
   timezonePath: /etc/localtime
   springDebug: false
-  namespace: spring-6-project-template # TODO: Adjust this according to your project needs and security requirements
+  # This value is set by Maven filtering
+  # and will be replaced with a valid version number during the build process.
+  namespace: @project.artifactId@
 
 replicaCount: 1
 
 image:
-  repository: @docker.repo@/@project.artifactId@
-  tag: @project.version@
+  # Those values are set by Maven filtering
+  # and will be replaced with a valid version number during the build process.
+  registry: @docker.repo@
   pullPolicy: IfNotPresent
 
 service:
