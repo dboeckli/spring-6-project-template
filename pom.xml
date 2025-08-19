@@ -194,6 +194,19 @@
                                 <!-- Force the use of '-SNAPSHOT' version naming -->
                                 <useUniqueVersions>false</useUniqueVersions>
                             </manifest>
+                            <manifestEntries>
+                                <Implementation-Title>${project.name}</Implementation-Title>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>${project.artifactId}</artifactId>
+                                <Implementation-Version>${project.version}</Implementation-Version>
+                                <!--suppress UnresolvedMavenProperty -->
+                                <git-SHA-1>${git.commit.id.abbrev}</git-SHA-1>
+                                <source-url>${project.scm.url}</source-url>
+                                <BuildDate>${maven.build.timestamp}</BuildDate>
+                                <Built-By>${user.name}</Built-By>
+                                <Build-Jdk>${java.version}</Build-Jdk>
+                                <packaging>${project.packaging}</packaging>
+                            </manifestEntries>
                         </archive>
                     </configuration>
                 </plugin>
