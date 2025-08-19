@@ -521,14 +521,6 @@
                         <goals>
                             <goal>build-info</goal>
                         </goals>
-                        <configuration>
-                            <additionalProperties>
-                                <mavenUser>${user.name}</mavenUser>
-                                <javaVersion>${java.version}</javaVersion>
-                                <javaVendor>${java.vendor}</javaVendor>
-                                <commit-id>${buildNumber}</commit-id>
-                            </additionalProperties>
-                        </configuration>
                     </execution>
 
                     <execution>
