@@ -60,9 +60,6 @@
         <sonar.language>java</sonar.language>
         <sonar.scm.provider>git</sonar.scm.provider>
         <jacoco.version>0.8.13</jacoco.version>
-
-        <!--suppress UnresolvedMavenProperty: is set by git git-commit-id-maven-plugin -->
-        <buildNumber>${git.commit.id.abbrev}</buildNumber>
     </properties>
 
     <repositories>
@@ -197,18 +194,6 @@
                                 <!-- Force the use of '-SNAPSHOT' version naming -->
                                 <useUniqueVersions>false</useUniqueVersions>
                             </manifest>
-                            <manifestEntries>
-                                <Implementation-Title>${project.name}</Implementation-Title>
-                                <groupId>${project.groupId}</groupId>
-                                <artifactId>${project.artifactId}</artifactId>
-                                <Implementation-Version>${project.version}</Implementation-Version>
-                                <git-SHA-1>${buildNumber}</git-SHA-1>
-                                <source-url>${project.scm.url}</source-url>
-                                <BuildDate>${maven.build.timestamp}</BuildDate>
-                                <Built-By>${user.name}</Built-By>
-                                <Build-Jdk>${java.version}</Build-Jdk>
-                                <packaging>${project.packaging}</packaging>
-                            </manifestEntries>
                         </archive>
                     </configuration>
                 </plugin>
