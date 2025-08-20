@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,13 +33,13 @@ class ActuatorInfoTest {
     void actuatorInfoTest() throws Exception {
         MvcResult result = mockMvc.perform(get("/actuator/info"))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.git.commit.id").isString())
+            .andExpect(jsonPath("$.git.commit.id.abbrev").isString())
 
-            .andExpect(jsonPath("$.build.javaVersion").value("21"))
-            .andExpect(jsonPath("$.build.commit-id").isString())
-            .andExpect(jsonPath("$.build.javaVendor").isString())
             .andExpect(jsonPath("$.build.artifact").value(buildProperties.getArtifact()))
             .andExpect(jsonPath("$.build.group").value(buildProperties.getGroup()))
+
+            .andExpect(jsonPath("$.java.version").value(startsWith("21")))
+
             .andReturn();
 
         log.info("Response: {}", result.getResponse().getContentAsString());
