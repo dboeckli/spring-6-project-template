@@ -199,7 +199,7 @@
                                 <groupId>${project.groupId}</groupId>
                                 <artifactId>${project.artifactId}</artifactId>
                                 <Implementation-Version>${project.version}</Implementation-Version>
-                                <!--suppress UnresolvedMavenProperty -->
+                                <!--suppress UnresolvedMavenProperty. git.commit.id.abbrev is set by git git-commit-id-maven-plugin -->
                                 <git-SHA-1>${git.commit.id.abbrev}</git-SHA-1>
                                 <source-url>${project.scm.url}</source-url>
                                 <BuildDate>${maven.build.timestamp}</BuildDate>
@@ -262,9 +262,7 @@
                         <configuration>
                             <rules>
                                 <requireJavaVersion>
-                                    <message>This build requires at least Java ${java.version},
-                                        update your JVM, and
-                                        run the build again</message>
+                                    <message>This build requires at least Java ${java.version}, update your JVM, and run the build again</message>
                                     <version>${java.version}</version>
                                 </requireJavaVersion>
                             </rules>
@@ -273,8 +271,7 @@
                 </executions>
             </plugin>
 
-            <!-- Spring Boot Actuator displays sbom-related information if a CycloneDX SBOM file is
-            present at the classpath -->
+            <!-- Spring Boot Actuator displays sbom-related information if a CycloneDX SBOM file is present at the classpath -->
             <plugin>
                 <groupId>org.cyclonedx</groupId>
                 <artifactId>cyclonedx-maven-plugin</artifactId>
@@ -290,10 +287,6 @@
                 </executions>
             </plugin>
 
-            <!--
-            this plugin generates some git properties. We use the "git.commit.id.abbrev" variable which we append
-            to the docker image id for builds in jenkins (docker.application.image.tag). See "jenkins" profile at the top.
-            -->
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
                 <artifactId>git-commit-id-maven-plugin</artifactId>
