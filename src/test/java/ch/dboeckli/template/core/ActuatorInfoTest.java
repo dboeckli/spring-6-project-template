@@ -1,5 +1,6 @@
 package ch.dboeckli.template.core;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,20 +30,20 @@ class ActuatorInfoTest {
     @Autowired
     BuildProperties buildProperties;
 
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     @Test
     void actuatorInfoTest() throws Exception {
-        MvcResult result = mockMvc.perform(get("/actuator/info"))
+        mockMvc.perform(get("/actuator/info"))
             .andExpect(status().isOk())
+            .andDo(result -> log.info("Response (pretty):\n{}", pretty(result.getResponse().getContentAsString())))
+
             .andExpect(jsonPath("$.git.commit.id.abbrev").isString())
 
             .andExpect(jsonPath("$.build.artifact").value(buildProperties.getArtifact()))
             .andExpect(jsonPath("$.build.group").value(buildProperties.getGroup()))
 
-            .andExpect(jsonPath("$.java.version").value(startsWith("21")))
-
-            .andReturn();
-
-        log.info("Response: {}", result.getResponse().getContentAsString());
+            .andExpect(jsonPath("$.java.version").value(startsWith("21")));
     }
 
     @Test
@@ -54,5 +55,16 @@ class ActuatorInfoTest {
 
         log.info("Response: {}", result.getResponse().getContentAsString());
     }
+
+    private String pretty(String body) {
+        try {
+            Object json = OBJECT_MAPPER.readValue(body, Object.class);
+            return OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+        } catch (Exception e) {
+            // Falls kein valides JSON: unverändert zurückgeben
+            return body;
+        }
+    }
+
 
 }
