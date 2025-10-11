@@ -14,7 +14,6 @@ public class TestClassOrderer implements ClassOrderer {
 
     private static int getOrder(ClassDescriptor classDescriptor) {
         String className = classDescriptor.getTestClass().getSimpleName();
-
         return switch (className) {
             case String name when name.endsWith("IT") -> 2;
             case String name when name.endsWith("Test") || name.endsWith("Tests") -> 1;
