@@ -1,6 +1,6 @@
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
+    image: otel/opentelemetry-collector-contrib:0.138.0
     container_name: otel-collector
     command: ["--config=/etc/otel-collector-config.yaml"]
     volumes:
@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
 
   jaeger:
-    image: jaegertracing/all-in-one:latest
+    image: jaegertracing/all-in-one:1.74.0
     container_name: jaeger
     ports:
       - "16686:16686"  # UI
@@ -26,7 +26,7 @@ services:
     restart: unless-stopped
 
   zipkin:
-    image: openzipkin/zipkin:latest
+    image: openzipkin/zipkin:3.5.1
     container_name: zipkin
     ports:
       - "9411:9411"   # Zipkin UI/API
@@ -35,7 +35,7 @@ services:
     restart: unless-stopped
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.7.1
     container_name: prometheus
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.1.5
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
@@ -58,7 +58,7 @@ services:
     restart: unless-stopped
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.16.2
+    image: docker.elastic.co/kibana/kibana:9.1.5
     container_name: kibana
     ports:
       - "5601:5601"

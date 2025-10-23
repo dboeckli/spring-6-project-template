@@ -46,6 +46,7 @@ management:
       enabled: true
       mode: full
   tracing:
+    enabled: true
     sampling:
       probability: '1.0'
   otlp:
