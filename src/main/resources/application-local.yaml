@@ -7,7 +7,7 @@ spring:
     name: spring-6-project-template
   docker:
     compose:
-      enabled: true
+      enabled: false
       stop:
         command: down
 
@@ -45,25 +45,6 @@ management:
     git:
       enabled: true
       mode: full
-  tracing:
-    enabled: true
-    sampling:
-      probability: '1.0'
-  otlp:
-    tracing:
-      endpoint: http://localhost:4318/v1/traces
-    metrics:
-      export:
-        url: http://localhost:4318/v1/metrics
-    logging:
-      endpoint: http://localhost:4318/v1/logs
-
-otel:
-  service:
-    name: ${spring.application.name}
-  exporter:
-    otlp:
-      endpoint: http://localhost:4318
 
 
 logging:
