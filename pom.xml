@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.5.7</version>
         <relativePath /> <!-- lookup parent from repository -->
+
     </parent>
 
     <!-- TODO: RENAME ME -->
@@ -137,10 +139,6 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
@@ -164,6 +162,16 @@
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
             <version>${logstash-logback.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 
         <dependency>
@@ -249,7 +257,7 @@
                     </excludes>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
@@ -322,14 +330,14 @@
                         <configuration>
                             <target>
                                 <propertyfile file="${project.build.directory}/helm.properties">
-                                    <entry key="helm.chart.version" value="v${project.version}" />
+                                    <entry key="helm.chart.version" value="v${project.version}"/>
                                 </propertyfile>
                                 <!--suppress UnresolvedMavenProperty: git.commit.id.abbrev is set by git git-commit-id-maven-plugin -->
                                 <replaceregexp file="${project.build.directory}/helm.properties"
                                                match="helm\.chart\.version=(v[0-9]+\.[0-9]+\.[0-9]+)_.*-SNAPSHOT"
                                                replace="helm.chart.version=\1-${git.commit.id.abbrev}"
-                                               byline="true" />
-                                <property file="${project.build.directory}/helm.properties" />
+                                               byline="true"/>
+                                <property file="${project.build.directory}/helm.properties"/>
                             </target>
                         </configuration>
                     </execution>
@@ -342,7 +350,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <delete file="${project.build.directory}/helm-charts/dependencies-values.yaml" />
+                                <delete file="${project.build.directory}/helm-charts/dependencies-values.yaml"/>
                             </target>
                         </configuration>
                     </execution>
@@ -505,7 +513,7 @@
                         </exclude>
                     </excludes>
                 </configuration>
-                
+
                 <executions>
                     <execution>
                         <id>add-build-infos</id>

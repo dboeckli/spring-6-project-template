@@ -12,12 +12,10 @@
         </encoder>
     </appender>
 
-
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
     </root>
 
-    <!-- Specific Logger for org.zalando.logbook.Logbook -->
     <logger name="org.zalando.logbook.Logbook" level="TRACE" additivity="false">
         <appender-ref ref="jsonConsoleAppender" />
     </logger>
