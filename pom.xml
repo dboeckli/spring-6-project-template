@@ -138,10 +138,6 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
@@ -503,10 +499,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <jvmArguments>
-                        -Dspring.application.admin.enabled=true
-                        -Dotel.java.global-autoconfigure.enabled=true
-                    </jvmArguments>
+                    <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
                     <!-- Consider to disable that in production environment  -->
                     <includeTools>true</includeTools>
                     <layers>
