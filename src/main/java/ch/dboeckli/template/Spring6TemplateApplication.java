@@ -4,8 +4,11 @@ package ch.dboeckli.template;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
+@RestController
 @Slf4j
 // TODOS: RENAME ME
 public class Spring6TemplateApplication {
@@ -15,4 +18,9 @@ public class Spring6TemplateApplication {
         SpringApplication.run(Spring6TemplateApplication.class, args);
     }
 
+    @RequestMapping(path = "/", produces = "application/json")
+    String home() {
+        log.info("home() has been called");
+        return "{\"message\":\"Hello World!\"}";
+    }
 }
