@@ -38,7 +38,7 @@ public class LoggingWithTracingTest {
     TestRestTemplate restTemplate;
 
     @Test
-    void logbook_logsMessage() {
+    void actuator_info_logbook_logsMessage() {
         try (LogCaptor logCaptor = LogCaptor.forClass(Logbook.class)) {
             String url = "http://localhost:" + port + "/actuator/info";
             restTemplate.getForEntity(url, String.class);
@@ -69,7 +69,7 @@ public class LoggingWithTracingTest {
     }
 
     @Test
-    void hello_logsMessage_viaLogbackAppender() {
+    void actuator_info_logbook__logsMessage_viaLogbackAppender() {
         Logger logger = (Logger) LoggerFactory.getLogger(Logbook.class);
         ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
         listAppender.start();
@@ -99,7 +99,6 @@ public class LoggingWithTracingTest {
                 "spanId muss für Request/Response identisch sein"
             )
         );
-
         logger.detachAppender(listAppender);
         listAppender.stop();
     }

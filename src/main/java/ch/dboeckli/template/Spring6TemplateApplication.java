@@ -18,7 +18,7 @@ public class Spring6TemplateApplication {
         SpringApplication.run(Spring6TemplateApplication.class, args);
     }
 
-    @RequestMapping(path = "/", produces = "application/json")
+    @RequestMapping(path = "/hello", produces = "application/json")
     String home() {
         log.info("home() has been called");
         return "{\"message\":\"Hello World!\"}";
