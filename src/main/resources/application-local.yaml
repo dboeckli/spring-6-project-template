@@ -45,7 +45,10 @@ management:
     git:
       enabled: true
       mode: full
-
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
 
 logging:
   level:
