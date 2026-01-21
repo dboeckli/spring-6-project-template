@@ -6,6 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>4.0.1</version>
+
         <relativePath /> <!-- lookup parent from repository -->
 
     </parent>
@@ -47,7 +48,6 @@
         <!-- our dependencies -->
         <spring-6-rest-mvc-api.version>0.0.1-SNAPSHOT</spring-6-rest-mvc-api.version>
 
-        <logbook.version>3.12.3</logbook.version>
         <logstash-logback.version>9.0</logstash-logback.version>
 
         <!-- plugins -->
@@ -153,16 +153,6 @@
             <optional>true</optional>
         </dependency>
 
-        <dependency>
-            <groupId>org.zalando</groupId>
-            <artifactId>logbook-spring-boot-starter</artifactId>
-            <version>${logbook.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.zalando</groupId>
-            <artifactId>logbook-logstash</artifactId>
-            <version>${logbook.version}</version>
-        </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
@@ -551,7 +541,9 @@
                         <id>start-springboot-app</id>
                         <goals>
                             <goal>start</goal>
+                            <goal>stop</goal>
                         </goals>
+                        <phase>post-integration-test</phase>
                         <configuration>
                             <skip>${skip.start.stop.springboot}</skip>
                             <wait>1000</wait> <!-- 1000 milliseconds is default -->
@@ -563,17 +555,6 @@
                                 <argument>--spring.cloud.kubernetes.enabled=false</argument>
                                 <argument>--spring.profiles.active=local</argument>
                             </arguments>
-                            <jmxPort>${jmx.server.port}</jmxPort>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>stop-springboot-app</id>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skip.start.stop.springboot}</skip>
                             <jmxPort>${jmx.server.port}</jmxPort>
                         </configuration>
                     </execution>
