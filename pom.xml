@@ -31,7 +31,7 @@
     </scm>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -294,19 +294,9 @@
                 </executions>
             </plugin>
 
-            <!-- Spring Boot Actuator displays sbom-related information if a CycloneDX SBOM file is present at the classpath -->
             <plugin>
                 <groupId>org.cyclonedx</groupId>
                 <artifactId>cyclonedx-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>create-bill-of-materials</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>makeBom</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
