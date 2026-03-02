@@ -59,7 +59,7 @@
         <jacoco.version>0.8.14</jacoco.version>
 
         <!-- Testing -->
-        <logcaptor.version>2.12.4</logcaptor.version>
+        <logcaptor.version>2.12.5</logcaptor.version>
 
         <!-- Sonar -->
         <sonar-maven-plugin.version>5.5.0.6356</sonar-maven-plugin.version>
