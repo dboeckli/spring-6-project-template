@@ -4,7 +4,7 @@ package ch.dboeckli.template;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
@@ -18,7 +18,7 @@ public class Spring6TemplateApplication {
 		SpringApplication.run(Spring6TemplateApplication.class, args);
 	}
 
-	@RequestMapping(path = "/hello", produces = "application/json")
+	@GetMapping(path = "/hello", produces = "application/json")
 	String home() {
 		log.info("home() has been called");
 		return "{\"message\":\"Hello World!\"}";
