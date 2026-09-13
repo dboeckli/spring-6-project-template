@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 // TODOS: RENAME ME
 class Spring6TemplateApplicationIT {
 
-    @Autowired
-    private ApplicationContext applicationContext;
+	@Autowired
+	private ApplicationContext applicationContext;
 
-    @Test
-    void contextLoads() {
-        assertNotNull(applicationContext, "Application context should not be null");
-        log.info("Testing Spring 6 Application {}", applicationContext.getApplicationName());
-    }
+	@Test
+	void contextLoads() {
+		assertNotNull(applicationContext, "Application context should not be null");
+		log.info("Testing Spring 6 Application {}", applicationContext.getApplicationName());
+	}
 
 }

@@ -13,14 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 // TODOS: RENAME ME
 public class Spring6TemplateApplication {
 
-    public static void main(String[] args) {
-        log.info("Starting Spring 6 Template Application...");
-        SpringApplication.run(Spring6TemplateApplication.class, args);
-    }
+	public static void main(String[] args) {
+		log.info("Starting Spring 6 Template Application...");
+		SpringApplication.run(Spring6TemplateApplication.class, args);
+	}
 
-    @RequestMapping(path = "/hello", produces = "application/json")
-    String home() {
-        log.info("home() has been called");
-        return "{\"message\":\"Hello World!\"}";
-    }
+	@RequestMapping(path = "/hello", produces = "application/json")
+	String home() {
+		log.info("home() has been called");
+		return "{\"message\":\"Hello World!\"}";
+	}
+
 }
