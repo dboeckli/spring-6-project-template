@@ -17,7 +17,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.filter.CommonsRequestLoggingFilter;
+import ch.dboeckli.template.config.RequestLoggingFilter;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-		properties = "logging.level.org.springframework.web.filter.CommonsRequestLoggingFilter=DEBUG")
+		properties = "logging.level.org.springframework.web.filter.RequestLoggingFilter=DEBUG")
 @AutoConfigureMockMvc
 @AutoConfigureObservability
 @Slf4j
@@ -40,7 +40,7 @@ public class LoggingWithTracingTest {
 
 	@Test
 	void actuator_info_logsMessage() {
-		try (LogCaptor logCaptor = LogCaptor.forClass(CommonsRequestLoggingFilter.class)) {
+		try (LogCaptor logCaptor = LogCaptor.forClass(RequestLoggingFilter.class)) {
 			String url = "http://localhost:" + port + "/actuator/info";
 			ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
@@ -48,14 +48,12 @@ public class LoggingWithTracingTest {
 
 			assertAll(() -> assertEquals(HttpStatus.OK, response.getStatusCode()), () -> assertNotNull(logEvents),
 					() -> assertEquals(2, logEvents.size()),
-					() -> assertEquals(CommonsRequestLoggingFilter.class.getName(),
-							logEvents.getFirst().getLoggerName()),
+					() -> assertEquals(RequestLoggingFilter.class.getName(), logEvents.getFirst().getLoggerName()),
 					() -> assertThat(logEvents.getFirst().getDiagnosticContext().get("traceId")).isNotBlank()
 						.matches("[0-9a-f]{32}"), // in micrometer traceId: 32 Hex
 					() -> assertThat(logEvents.getFirst().getDiagnosticContext().get("spanId")).isNotBlank()
 						.matches("[0-9a-f]{16}"), // in micrometer spanId: 16 Hex
-					() -> assertEquals(CommonsRequestLoggingFilter.class.getName(),
-							logEvents.getLast().getLoggerName()),
+					() -> assertEquals(RequestLoggingFilter.class.getName(), logEvents.getLast().getLoggerName()),
 					() -> assertThat(logEvents.getLast().getDiagnosticContext().get("traceId")).isNotBlank()
 						.matches("[0-9a-f]{32}"),
 					() -> assertThat(logEvents.getLast().getDiagnosticContext().get("spanId")).isNotBlank()
@@ -71,7 +69,7 @@ public class LoggingWithTracingTest {
 
 	@Test
 	void actuator_info_logsMessage_viaLogbackAppender() {
-		Logger logger = (Logger) LoggerFactory.getLogger(CommonsRequestLoggingFilter.class);
+		Logger logger = (Logger) LoggerFactory.getLogger(RequestLoggingFilter.class);
 		ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
 		listAppender.start();
 		logger.addAppender(listAppender);
@@ -82,12 +80,12 @@ public class LoggingWithTracingTest {
 
 		assertAll(() -> assertEquals(HttpStatus.OK, response.getStatusCode()), () -> assertNotNull(logEvents),
 				() -> assertEquals(2, logEvents.size()),
-				() -> assertEquals(CommonsRequestLoggingFilter.class.getName(), logEvents.getFirst().getLoggerName()),
+				() -> assertEquals(RequestLoggingFilter.class.getName(), logEvents.getFirst().getLoggerName()),
 				() -> assertThat(logEvents.getFirst().getMDCPropertyMap().get("traceId")).isNotBlank()
 					.matches("[0-9a-f]{32}"), // in micrometer traceId: 32 Hex
 				() -> assertThat(logEvents.getFirst().getMDCPropertyMap().get("spanId")).isNotBlank()
 					.matches("[0-9a-f]{16}"), // in micrometer spanId: 16 Hex
-				() -> assertEquals(CommonsRequestLoggingFilter.class.getName(), logEvents.getLast().getLoggerName()),
+				() -> assertEquals(RequestLoggingFilter.class.getName(), logEvents.getLast().getLoggerName()),
 				() -> assertThat(logEvents.getLast().getMDCPropertyMap().get("traceId")).isNotBlank()
 					.matches("[0-9a-f]{32}"),
 				() -> assertThat(logEvents.getLast().getMDCPropertyMap().get("spanId")).isNotBlank()
@@ -104,7 +102,7 @@ public class LoggingWithTracingTest {
 
 	@Test
 	void hello_logsMessage_viaLogbackAppender() {
-		Logger logger = (Logger) LoggerFactory.getLogger(CommonsRequestLoggingFilter.class);
+		Logger logger = (Logger) LoggerFactory.getLogger(RequestLoggingFilter.class);
 		ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
 		listAppender.start();
 		logger.addAppender(listAppender);
@@ -115,12 +113,12 @@ public class LoggingWithTracingTest {
 
 		assertAll(() -> assertEquals(HttpStatus.OK, response.getStatusCode()), () -> assertNotNull(logEvents),
 				() -> assertEquals(2, logEvents.size()),
-				() -> assertEquals(CommonsRequestLoggingFilter.class.getName(), logEvents.getFirst().getLoggerName()),
+				() -> assertEquals(RequestLoggingFilter.class.getName(), logEvents.getFirst().getLoggerName()),
 				() -> assertThat(logEvents.getFirst().getMDCPropertyMap().get("traceId")).isNotBlank()
 					.matches("[0-9a-f]{32}"), // in micrometer traceId: 32 Hex
 				() -> assertThat(logEvents.getFirst().getMDCPropertyMap().get("spanId")).isNotBlank()
 					.matches("[0-9a-f]{16}"), // in micrometer spanId: 16 Hex
-				() -> assertEquals(CommonsRequestLoggingFilter.class.getName(), logEvents.getLast().getLoggerName()),
+				() -> assertEquals(RequestLoggingFilter.class.getName(), logEvents.getLast().getLoggerName()),
 				() -> assertThat(logEvents.getLast().getMDCPropertyMap().get("traceId")).isNotBlank()
 					.matches("[0-9a-f]{32}"),
 				() -> assertThat(logEvents.getLast().getMDCPropertyMap().get("spanId")).isNotBlank()
