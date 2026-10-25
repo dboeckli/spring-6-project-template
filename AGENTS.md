@@ -42,6 +42,8 @@ is needed here. On a normal host (Windows/CI) this does not apply either.
 
 - Helm-only: chart in `helm-charts/`, packaged to `target/helm/repo/`, release name = artifactId,
   namespace `spring-6-project-template`, NodePort `30080`.
+- CI pins Helm `v4.3.1` via `azure/setup-helm` before the first Helm call (runner default is Helm 3).
+  The sandbox kit ships Helm 4 as `helm`, so `-Dhelm.executable=helm4` is no longer needed.
 - CI (`.github/workflows/`): `maven-build.yml` builds + deploys snapshots and triggers
   `deploy-and-test-cluster.yml`; `release.yml` runs the Maven release.
 - Dependency updates are managed via `.github/dependabot.yml` and `.github/renovate.json`; validate

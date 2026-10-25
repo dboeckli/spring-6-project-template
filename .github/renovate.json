@@ -173,6 +173,19 @@
             "matchStrings": [
                 "<spring-boot\\.build-image\\.builder>paketobuildpacks/builder-noble-java-tiny:(?<currentValue>\\d+\\.\\d+\\.\\d+)</spring-boot\\.build-image\\.builder>"
             ]
+        },
+        {
+            "description": "Update Helm version pinned in GitHub workflows (azure/setup-helm)",
+            "customType": "regex",
+            "datasourceTemplate": "github-releases",
+            "depNameTemplate": "helm/helm",
+            "extractVersionTemplate": "^v?(?<version>.*)$",
+            "managerFilePatterns": [
+                "/^\\.github\\/workflows\\/.*\\.ya?ml$/"
+            ],
+            "matchStrings": [
+                "uses: azure/setup-helm@[^\\n]+\\n\\s+with:\\n\\s+version: v(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+            ]
         }
     ],
     "platformAutomerge": false,
