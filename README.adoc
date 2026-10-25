@@ -29,51 +29,15 @@ Start a new sandbox:
 ----
 sbx run opencode `
     --kit "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker.cloudsmith.io/dboeckli/sbx/sbx-opencode-tooling:latest `
+    --template docker.io/domboeckli/sbx-opencode-tooling:latest `
     --skills=off `
-    --static-mcp idea `
+    --static-mcp idea,k8s,docker `
     . `
     "C:\development\maven-repo:ro"
 ----
 
-Start the sandbox with Kubernetes support:
-
-[source,powershell]
-----
-sbx run opencode `
-    --kit "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker.cloudsmith.io/dboeckli/sbx/sbx-opencode-tooling:latest `
-    --skills=off `
-    --static-mcp idea `
-    . `
-    "C:\development\maven-repo:ro" `
-    "$env:USERPROFILE\.kube:ro"
-----
-
-Claude variant (Home):
-
-[source,powershell]
-----
-sbx run claude `
-    --kit "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker.cloudsmith.io/dboeckli/sbx/sbx-claude-tooling:latest `
-    --skills=off `
-    --static-mcp idea `
-    . `
-    "C:\development\maven-repo:ro"
-----
-
-Mammouth (template pin lives in the spec image):
-
-[source,powershell]
-----
-sbx run "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=mammouth-agent" `
-    --kit-arg imageTag=latest `
-    --skills=off `
-    --static-mcp idea `
-    . `
-    "C:\development\maven-repo:ro"
-----
+IntelliJ, Kubernetes and host Docker are wired through the sbx MCP gateway (`--static-mcp idea,k8s,docker`),
+so no `.kube` mount is required.
 
 Apply the kit to an existing sandbox (restarts the sandbox, VM state is kept):
 
