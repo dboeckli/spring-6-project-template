@@ -39,15 +39,6 @@ sbx run opencode `
 IntelliJ, Kubernetes and host Docker are wired through the sbx MCP gateway (`--static-mcp idea,k8s,docker`),
 so no `.kube` mount is required.
 
-Apply the kit to an existing sandbox (restarts the sandbox, VM state is kept):
-
-[source,powershell]
-----
-sbx kit add opencode-spring-6-project-template "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent"
-----
-
-NOTE: Before any `./mvnw` in the sandbox run `export npm_config_bin_links=false` (Spotless/prettier otherwise fails with EPERM on the mounted workspace).
-
 == Getting Started
 
 === 1. Project Setup
